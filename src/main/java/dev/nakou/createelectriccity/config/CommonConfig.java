@@ -20,10 +20,13 @@ public class CommonConfig {
     public static ModConfigSpec.IntValue LIGHTS_MAX_OUTPUT;
     public static ModConfigSpec.IntValue LIGHTS_MAX_LENGTH;
 
+    //General
+    public static ModConfigSpec.BooleanValue CONNECTOR_IGNORE_FACE_CHECK;
+
     // ====== Message Config ======
     public static ModConfigSpec.BooleanValue MESSAGES_ENABLED;
 
-    // ====== Motor Configs (Grouped Struct) ======
+    // ====== Light Config (Grouped Struct) ======
     public static class LightConfig {
         public ModConfigSpec.IntValue CONSUMPTION;
         public ModConfigSpec.IntValue LUMENS;
@@ -41,7 +44,8 @@ public class CommonConfig {
         LIGHTS_MAX_LENGTH = builder.comment("Heavy Connector max length in blocks").defineInRange("max_length", 48, 0, 256);
         builder.pop();
 
-        SMALL_LIGHT_BUBBLE = light(builder, CATAGORY_LIGHTS, 1, 8);
+        CONNECTOR_IGNORE_FACE_CHECK = builder.comment("Ignore checking if block face can support connector.").define("connector_ignore_face_check", true);
+        SMALL_LIGHT_BUBBLE = light(builder, CATAGORY_LIGHTS, 1, 14);
         COMMON_CONFIG = builder.build();
     }
 
@@ -51,8 +55,7 @@ public class CommonConfig {
         builder.comment(category).push(category);
         LightConfig config = new LightConfig();
         config.CONSUMPTION = builder.comment("Consumption of FE/t").defineInRange("consumption", consumption, 0, Integer.MAX_VALUE);
-        config.LUMENS = builder.comment("Production of light").defineInRange("lumens", lumens, 0, Integer.MAX_VALUE);
-        config.AUDIO_ENABLED = builder.comment("Enable light audio").define("audio_enabled", true);
+        config.LUMENS = builder.comment("Production of light").defineInRange("lumens", lumens, 0, 15);
         builder.pop();
         return config;
     }
@@ -60,7 +63,7 @@ public class CommonConfig {
     // ===== Config Loading =====
     @SubscribeEvent
     public static void onLoad(ModConfigEvent.Loading event) {
-        loadConfig(CommonConfig.COMMON_CONFIG, FMLPaths.CONFIGDIR.get().resolve("create_better_motors-common.toml"));
+        loadConfig(CommonConfig.COMMON_CONFIG, FMLPaths.CONFIGDIR.get().resolve("createelectriccity-common.toml"));
     }
 
     public static void loadConfig(ModConfigSpec spec, java.nio.file.Path path) {

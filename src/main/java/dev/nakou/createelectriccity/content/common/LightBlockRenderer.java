@@ -3,8 +3,8 @@ package dev.nakou.createelectriccity.content.common;
 import com.mrh0.createaddition.rendering.WireNodeRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 
-public class LightRenderer extends WireNodeRenderer<AbstractLightBlockEntity> {
-    public LightRenderer(BlockEntityRendererProvider.Context context) {
+public class LightBlockRenderer extends WireNodeRenderer<AbstractLightBlockEntity> {
+    public LightBlockRenderer(BlockEntityRendererProvider.Context context) {
         super(context);
     }
 }

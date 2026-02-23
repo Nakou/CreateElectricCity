@@ -1,12 +1,9 @@
 package dev.nakou.createelectriccity.content.smalllightbulb;
 
-import com.mrh0.createaddition.blocks.connector.SmallLightConnectorBlock;
-import com.mrh0.createaddition.blocks.connector.base.AbstractConnectorBlockEntity;
-import com.mrh0.createaddition.blocks.connector.ConnectorType;
-import com.mrh0.createaddition.blocks.connector.base.AbstractConnectorBlock;
 import com.mrh0.createaddition.energy.network.EnergyNetwork;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
 import dev.nakou.createelectriccity.config.CommonConfig;
+import dev.nakou.createelectriccity.content.common.AbstractLightBlock;
 import dev.nakou.createelectriccity.content.common.AbstractLightBlockEntity;
 import dev.nakou.createelectriccity.registry.CECBlockEntityTypes;
 import net.minecraft.core.BlockPos;
@@ -21,19 +18,20 @@ import java.util.List;
 
 
 
-public class SmallLightBulbEntity extends AbstractLightBlockEntity {
+public class SmallLightBulbBlockEntity extends AbstractLightBlockEntity {
 
     private final static float OFFSET_HEIGHT = 1f;
-    public final static Vec3 OFFSET_DOWN = new Vec3(0f, -OFFSET_HEIGHT/16f, 0f);
-    public final static Vec3 OFFSET_UP = new Vec3(0f, OFFSET_HEIGHT/16f, 0f);
-    public final static Vec3 OFFSET_NORTH = new Vec3(0f, 0f, -OFFSET_HEIGHT/16f);
-    public final static Vec3 OFFSET_WEST = new Vec3(-OFFSET_HEIGHT/16f, 0f, 0f);
-    public final static Vec3 OFFSET_SOUTH = new Vec3(0f, 0f, OFFSET_HEIGHT/16f);
-    public final static Vec3 OFFSET_EAST = new Vec3(OFFSET_HEIGHT/16f, 0f, 0f);
+    private final static float OFFSET_DEVIDER = 2f;
+    public final static Vec3 OFFSET_DOWN = new Vec3(0f, -OFFSET_HEIGHT/OFFSET_DEVIDER, 0f);
+    public final static Vec3 OFFSET_UP = new Vec3(0f, OFFSET_HEIGHT/OFFSET_DEVIDER, 0f);
+    public final static Vec3 OFFSET_NORTH = new Vec3(0f, 0f, -OFFSET_HEIGHT/OFFSET_DEVIDER);
+    public final static Vec3 OFFSET_WEST = new Vec3(-OFFSET_HEIGHT/OFFSET_DEVIDER, 0f, 0f);
+    public final static Vec3 OFFSET_SOUTH = new Vec3(0f, 0f, OFFSET_HEIGHT/OFFSET_DEVIDER);
+    public final static Vec3 OFFSET_EAST = new Vec3(OFFSET_HEIGHT/OFFSET_DEVIDER, 0f, 0f);
 
     private int posTimeOffset = 0;
 
-    public SmallLightBulbEntity(BlockEntityType<?> blockEntityTypeIn, BlockPos pos, BlockState state) {
+    public SmallLightBulbBlockEntity(BlockEntityType<?> blockEntityTypeIn, BlockPos pos, BlockState state) {
         super(blockEntityTypeIn, pos, state);
 
         posTimeOffset = 10 + (Math.abs(pos.getX()*31 + pos.getY()*45 + pos.getZ()*33) % 7) * 3;
@@ -51,7 +49,7 @@ public class SmallLightBulbEntity extends AbstractLightBlockEntity {
 
     @Override
     public boolean isEnergyInput(Direction side) {
-        return this.getBlockState().getValue(AbstractConnectorBlock.FACING) == side;
+        return this.getBlockState().getValue(AbstractLightBlock.FACING) == side;
     }
 
     @Override
@@ -76,7 +74,7 @@ public class SmallLightBulbEntity extends AbstractLightBlockEntity {
 
     @Override
     public Vec3 getNodeOffset(int node) {
-        return switch (getBlockState().getValue(AbstractConnectorBlock.FACING)) {
+        return switch (getBlockState().getValue(AbstractLightBlock.FACING)) {
             case DOWN -> OFFSET_DOWN;
             case UP -> OFFSET_UP;
             case NORTH -> OFFSET_NORTH;
@@ -86,13 +84,12 @@ public class SmallLightBulbEntity extends AbstractLightBlockEntity {
         };
     }
 
-    @Override
-    public ConnectorType getConnectorType() {
-        return ConnectorType.Large;
-    }
-
     public int getMaxWireLength() {
         return CommonConfig.LIGHTS_MAX_LENGTH.get();
+    }
+
+    public int getComsumption(){
+        return CommonConfig.SMALL_LIGHT_BUBBLE.CONSUMPTION.get();
     }
 
     private int tickToggleTimer = 0;
@@ -102,21 +99,21 @@ public class SmallLightBulbEntity extends AbstractLightBlockEntity {
         if(level.isClientSide()) return;
         EnergyNetwork network = getNetwork(0);
         if (network != null) network.demand(1);
-        boolean hasEnergy = network != null && network.pull(CommonConfig.SMALL_LIGHT_BUBBLE.CONSUMPTION.get(), false) > 0;
+        boolean hasEnergy = network != null && network.pull(getComsumption(), false) > 0;
         tickToggleTimer = tickToggleTimer + (hasEnergy ? 1 : -1);
 
         if (tickToggleTimer >= posTimeOffset) {
             tickToggleTimer = posTimeOffset;
-            if (!getBlockState().getValue(SmallLightConnectorBlock.POWERED))
+            if (!getBlockState().getValue(SmallLightBulbBlock.POWERED))
                 getLevel().setBlockAndUpdate(getBlockPos(), getBlockState()
-                        .setValue(SmallLightConnectorBlock.POWERED, true));
+                        .setValue(SmallLightBulbBlock.POWERED, true));
         }
 
         if (tickToggleTimer <= -posTimeOffset) {
             tickToggleTimer = -posTimeOffset;
-            if (getBlockState().getValue(SmallLightConnectorBlock.POWERED))
+            if (getBlockState().getValue(SmallLightBulbBlock.POWERED))
                 getLevel().setBlockAndUpdate(getBlockPos(), getBlockState()
-                        .setValue(SmallLightConnectorBlock.POWERED, false));
+                        .setValue(SmallLightBulbBlock.POWERED, false));
         }
     }
 

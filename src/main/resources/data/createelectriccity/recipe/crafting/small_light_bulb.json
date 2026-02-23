@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "I": {
+      "item": "minecraft:iron_ingot"
+    },
+    "G": {
+      "item": "minecraft:glass"
+    },
+    "C": {
+      "tag": "c:wires/copper"
+    }
+  },
+  "pattern": [
+    " G ",
+    " C ",
+    " I "
+  ],
+  "result": {
+    "id": "createelectriccity:small_light_bulb"
+  },
+  "show_notification": true
+}

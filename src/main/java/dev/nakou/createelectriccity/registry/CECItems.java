@@ -7,13 +7,14 @@ import net.minecraft.world.item.Item;
 import static dev.nakou.createelectriccity.CreateElectricCity.REGISTRATE;
 
 public class CECItems {
-    public static final ItemEntry<Item> SMALL_LIGHT_BULB = REGISTRATE.item("small_light_bulb", Item::new).register();
+    /* we don't have any items yet except the ones linked to block that should be registered as blocks already
+    public static final ItemEntry<Item> SMALL_LIGHT_BULB = REGISTRATE.item("small_light_bulb", Item::new).register();*/
 
     public static void load() {}
-    @SafeVarargs
+    /*@SafeVarargs
     private static ItemEntry<Item> taggedIngredient(String name, TagKey<Item>... tags) {
         return REGISTRATE.item(name, Item::new)
                 .tag(tags)
                 .register();
-    }
+    }*/
 }

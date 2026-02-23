@@ -6,6 +6,8 @@ import dev.nakou.createelectriccity.registry.*;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.fml.ModLoadingContext;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import org.slf4j.Logger;
 
@@ -49,9 +51,9 @@ public class CreateElectricCity {
     public static final CreateRegistrate BASE_REGISTRATE = CreateRegistrate.create(MODID);
 
     private static DeferredRegister<CreativeModeTab> TAB_REGISTRAR = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, MODID);
-    public static final DeferredHolder<CreativeModeTab, CreativeModeTab> tab = TAB_REGISTRAR.register("create_better_motors_tab",
+    public static final DeferredHolder<CreativeModeTab, CreativeModeTab> tab = TAB_REGISTRAR.register("createelectriccitytab",
             () -> CreativeModeTab.builder()
-                    .title(Component.translatable("item_group." + MODID + ".tab"))
+                    .title(Component.translatable("itemGroup." + MODID + ".tab"))
                     .icon(CECBlocks.SMALL_LIGHT_BULB::asStack)
                     .build()
     );
@@ -59,7 +61,7 @@ public class CreateElectricCity {
     public static final CreateRegistrate REGISTRATE = BASE_REGISTRATE.setCreativeTab(tab);
 
     public static final ResourceKey<CreativeModeTab> CREATIVE_TAB_KEY = ResourceKey.create(Registries.CREATIVE_MODE_TAB,
-            ResourceLocation.fromNamespaceAndPath(MODID, "create_better_motors_tab"));
+            ResourceLocation.fromNamespaceAndPath(MODID, "createelectriccitytab"));
 
     public static ResourceLocation asResource(String path) {
         return ResourceLocation.fromNamespaceAndPath(MODID, path);
@@ -70,7 +72,7 @@ public class CreateElectricCity {
     public CreateElectricCity(IEventBus modEventBus, ModContainer modContainer) {
         ModLoadingContext modLoadingContext = ModLoadingContext.get();
 
-        LOGGER.info("Hello 1.21.1 C:BM!");
+        LOGGER.info("Initializing Create : Electric City!");
         BASE_REGISTRATE.registerEventListeners(modEventBus);
         TAB_REGISTRAR.register(modEventBus);
         NeoForge.EVENT_BUS.register(this);
@@ -80,25 +82,22 @@ public class CreateElectricCity {
         CECItems.load();
         modContainer.registerConfig(ModConfig.Type.COMMON, CommonConfig.COMMON_CONFIG);
         modEventBus.addListener(RegisterCapabilitiesEvent.class, CECCapabilities::register);
-    }
-
-    private void commonSetup(FMLCommonSetupEvent event) {
-        // Some common setup code
-        LOGGER.info("HELLO FROM COMMON SETUP");
-
-        if (Config.LOG_DIRT_BLOCK.getAsBoolean()) {
-            LOGGER.info("DIRT BLOCK >> {}", BuiltInRegistries.BLOCK.getKey(Blocks.DIRT));
-        }
-
-        LOGGER.info("{}{}", Config.MAGIC_NUMBER_INTRODUCTION.get(), Config.MAGIC_NUMBER.getAsInt());
-
-        Config.ITEM_STRINGS.get().forEach((item) -> LOGGER.info("ITEM >> {}", item));
+        LOGGER.info("CEC : Done initializing");
     }
 
     // You can use SubscribeEvent and let the Event Bus discover methods to call
     @SubscribeEvent
     public void onServerStarting(ServerStartingEvent event) {
         // Do something when the server starts
-        LOGGER.info("HELLO from server starting");
+        LOGGER.info("CEC : HELLO from server starting");
+    }
+
+    // You can use EventBusSubscriber to automatically register all static methods in the class annotated with @SubscribeEvent
+    @EventBusSubscriber(modid = MODID, value = Dist.CLIENT)
+    public static class ClientModEvents {
+        @SubscribeEvent
+        public static void onClientSetup(FMLClientSetupEvent event) {
+
+        }
     }
 }

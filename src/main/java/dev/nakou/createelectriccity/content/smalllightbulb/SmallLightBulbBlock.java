@@ -1,34 +1,51 @@
 package dev.nakou.createelectriccity.content.smalllightbulb;
 
-import com.mrh0.createaddition.blocks.connector.base.AbstractConnectorBlock;
 import com.mrh0.createaddition.shapes.CAShapes;
 import com.simibubi.create.foundation.utility.CreateLang;
+import com.tterrag.registrate.providers.DataGenContext;
+import com.tterrag.registrate.providers.RegistrateBlockstateProvider;
 import dev.nakou.createelectriccity.config.CommonConfig;
 import dev.nakou.createelectriccity.content.common.AbstractLightBlock;
+import dev.nakou.createelectriccity.content.common.LightMode;
+import dev.nakou.createelectriccity.content.common.LightVariant;
 import dev.nakou.createelectriccity.registry.CECBlockEntityTypes;
 import dev.nakou.createelectriccity.utils.StringFormattingTool;
 import net.createmod.catnip.math.VoxelShaper;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import org.jetbrains.annotations.Nullable;
+import net.neoforged.neoforge.client.model.generators.BlockModelProvider;
+import net.neoforged.neoforge.client.model.generators.ModelFile;
+import net.neoforged.neoforge.client.model.generators.MultiPartBlockStateBuilder;
 
 import java.util.List;
 
-public class SmallLightBulbBlock extends AbstractLightBlock<SmallLightBulbEntity> {
+import static dev.nakou.createelectriccity.CreateElectricCity.MODID;
+
+public class SmallLightBulbBlock extends AbstractLightBlock<SmallLightBulbBlockEntity> {
     public static final VoxelShaper CONNECTOR_SHAPE = CAShapes.shape(5, 0, 5, 11, 9, 11).forDirectional();
     public SmallLightBulbBlock(Properties properties) {
         super(properties);
+    }
+
+    @Override
+    public InteractionResult OnWrenched(BlockState state, UseOnContext c) {
+        return InteractionResult.SUCCESS;
     }
 
     @Override
@@ -69,12 +86,12 @@ public class SmallLightBulbBlock extends AbstractLightBlock<SmallLightBulbEntity
     }
 
     @Override
-    public Class<SmallLightBulbEntity> getBlockEntityClass() {
-        return SmallLightBulbEntity.class;
+    public Class<SmallLightBulbBlockEntity> getBlockEntityClass() {
+        return SmallLightBulbBlockEntity.class;
     }
 
     @Override
-    public BlockEntityType<? extends SmallLightBulbEntity> getBlockEntityType() {
+    public BlockEntityType<? extends SmallLightBulbBlockEntity> getBlockEntityType() {
         return CECBlockEntityTypes.SMALL_LIGHT_BULB.get();
     }
 
@@ -86,5 +103,49 @@ public class SmallLightBulbBlock extends AbstractLightBlock<SmallLightBulbEntity
     @Override
     public VoxelShape getShape(BlockState state, BlockGetter worldIn, BlockPos pos, CollisionContext context) {
         return CONNECTOR_SHAPE.get(state.getValue(FACING).getOpposite());
+    }
+
+    public static void makeBlockState(DataGenContext<Block, SmallLightBulbBlock> ctx, RegistrateBlockstateProvider provider) {
+        BlockModelProvider models = provider.models();
+        String basePath = "block/lights/";
+        String basePathSmall = basePath + "small_light_bulb/";
+        MultiPartBlockStateBuilder builder = provider.getMultipartBuilder(ctx.get());
+
+        ModelFile.ExistingModelFile onModel = models.getExistingFile(ResourceLocation.fromNamespaceAndPath(MODID, basePathSmall + "on"));
+        ModelFile.ExistingModelFile offModel = models.getExistingFile(ResourceLocation.fromNamespaceAndPath(MODID, basePathSmall + "off"));
+        ModelFile.ExistingModelFile girderBaseModel = models.getExistingFile(ResourceLocation.fromNamespaceAndPath(MODID, basePathSmall + "girder_base"));
+
+        for(Direction direction: Direction.values()) {
+            int horizontalAngle = direction == Direction.UP ? 180 : direction == Direction.DOWN ? 0 : 90;
+            int  verticalAngle = ((int) direction.toYRot() + (direction.getAxis()
+                    .isVertical() ? 180 : 0))% 360;
+            builder.part()
+                    .modelFile(onModel)
+                    .rotationX(horizontalAngle)
+                    .rotationY(verticalAngle)
+                    .addModel()
+                    .condition(SmallLightBulbBlock.FACING, direction)
+                    .condition(SmallLightBulbBlock.MODE, LightMode.None)
+                    .condition(SmallLightBulbBlock.POWERED, Boolean.TRUE)
+                    .end()
+                    .part()
+                    .modelFile(offModel)
+                    .rotationX(horizontalAngle)
+                    .rotationY(verticalAngle)
+                    .addModel()
+                    .condition(SmallLightBulbBlock.FACING, direction)
+                    .condition(SmallLightBulbBlock.MODE, LightMode.None)
+                    .condition(SmallLightBulbBlock.POWERED, Boolean.FALSE)
+                    .end();
+            builder.part()
+                    .modelFile(girderBaseModel)
+                    .rotationX(horizontalAngle)
+                    .rotationY(verticalAngle)
+                    .addModel()
+                    .condition(SmallLightBulbBlock.FACING, direction)
+                    .condition(SmallLightBulbBlock.VARIANT, LightVariant.Girder)
+                    .end();
+
+        }
     }
 }

@@ -1,5 +1,6 @@
 package dev.nakou.createelectriccity.content.common;
 
+import com.mrh0.createaddition.blocks.connector.ConnectorType;
 import com.mrh0.createaddition.config.CommonConfig;
 import com.mrh0.createaddition.debug.IDebugDrawer;
 import com.mrh0.createaddition.energy.IEnergyProvider;
@@ -38,14 +39,14 @@ import net.neoforged.neoforge.energy.IEnergyStorage;
 import org.jetbrains.annotations.Nullable;
 
 public abstract class AbstractLightBlockEntity extends SmartBlockEntity implements IWireNode, IObserveBlockEntity, IHaveGoggleInformation, IDebugDrawer, IEnergyProvider {
-    private final Set<LocalNode> wireCache = new HashSet();
+    private final Set<LocalNode> wireCache = new HashSet<>();
     private final LocalNode[] localNodes = new LocalNode[this.getNodeCount()];
     private final IWireNode[] nodeCache = new IWireNode[this.getNodeCount()];
     private EnergyNetwork network;
-    private int demand = 0;
+    //private int demand = 0;
     private boolean wasContraption = false;
     private boolean firstTick = true;
-    public AbstractLightBlockEntity.InterfaceEnergyHandler internal = new AbstractLightBlockEntity.InterfaceEnergyHandler();
+    protected InterfaceEnergyHandler internal = new InterfaceEnergyHandler();
     protected BlockCapabilityCache<IEnergyStorage, Direction> external;
     boolean externalStorageInvalid = false;
 
@@ -57,6 +58,8 @@ public abstract class AbstractLightBlockEntity extends SmartBlockEntity implemen
         return !this.isEnergyInput(direction) && !this.isEnergyOutput(direction) ? null : this.internal;
     }
 
+    public abstract int getComsumption();
+
     public abstract int getMaxIn();
 
     public abstract int getMaxOut();
@@ -67,6 +70,11 @@ public abstract class AbstractLightBlockEntity extends SmartBlockEntity implemen
 
     public @Nullable IWireNode getWireNode(int index) {
         return IWireNode.getWireNodeFrom(index, this, this.localNodes, this.nodeCache, this.level);
+    }
+
+    @Override
+    public ConnectorType getConnectorType() { // this is the last remaining connection to the "connector" object as the IWireNode needs the info in that format.
+        return ConnectorType.Small; // for now all lights are small except maybe some heavy ones
     }
 
     public @Nullable LocalNode getLocalNode(int index) {
@@ -307,13 +315,18 @@ public abstract class AbstractLightBlockEntity extends SmartBlockEntity implemen
     public boolean addToGoggleTooltip(List<Component> tooltip, boolean isPlayerSneaking) {
         ObservePacketPayload.send(this.worldPosition, 0);
         String spacing = " ";
-        CALang.builder().add(Component.translatable("createaddition.tooltip.connector.info").withStyle(ChatFormatting.WHITE)).forGoggles(tooltip);
-        CALang.builder().add(Component.translatable("createaddition.tooltip.energy.mode").withStyle(ChatFormatting.GRAY)).forGoggles(tooltip);
-        CALang.builder().add(Component.literal(" ").append(((LightMode) this.getBlockState().getValue(AbstractLightBlock.MODE)).getTooltip().withStyle(ChatFormatting.AQUA))).forGoggles(tooltip);
-        CALang.builder().add(Component.translatable("createaddition.tooltip.energy.usage").withStyle(ChatFormatting.GRAY)).forGoggles(tooltip);
-        CALang.builder().add(Component.literal(" ").append(Util.format(EnergyNetworkPacketPayload.clientBuff)).append("⚡/t").withStyle(ChatFormatting.AQUA)).forGoggles(tooltip);
-        boolean res = IHaveGoggleInformation.super.addToGoggleTooltip(tooltip, isPlayerSneaking);
-        return res;
+        CALang.builder().add(Component.translatable("create.tooltip.createelectriccity.lights.info").withStyle(ChatFormatting.WHITE)).forGoggles(tooltip);
+        CALang.builder().add(Component.translatable("createelectriccity.tooltip.energy.currentStatus").withStyle(ChatFormatting.GRAY)).forGoggles(tooltip);
+        if(this.getBlockState().getValue(AbstractLightBlock.POWERED)){
+            CALang.builder().add(Component.translatable("create.tooltip.createelectriccity.lights.on").withStyle(ChatFormatting.AQUA)).forGoggles(tooltip);
+            CALang.builder().add(Component.translatable("create.tooltip.createelectriccity.energy_usage").withStyle(ChatFormatting.GRAY)).forGoggles(tooltip);
+            CALang.builder().add(Component.literal(" ").append(Util.format(getComsumption())).append("⚡/t").withStyle(ChatFormatting.AQUA)).forGoggles(tooltip);
+        } else {
+            CALang.builder().add(Component.translatable("create.tooltip.createelectriccity.lights.off").withStyle(ChatFormatting.RED)).forGoggles(tooltip);
+            CALang.builder().add(Component.translatable("create.tooltip.createelectriccity.energy_usage").withStyle(ChatFormatting.GRAY)).forGoggles(tooltip);
+            CALang.builder().add(Component.literal(" 0⚡/t").withStyle(ChatFormatting.RED)).forGoggles(tooltip);
+        }
+        return IHaveGoggleInformation.super.addToGoggleTooltip(tooltip, isPlayerSneaking);
     }
 
     public boolean ignoreCapSide() {
@@ -371,7 +384,7 @@ public abstract class AbstractLightBlockEntity extends SmartBlockEntity implemen
         }
     }
 
-    private class InterfaceEnergyHandler implements IEnergyStorage {
+    protected class InterfaceEnergyHandler implements IEnergyStorage {
         public InterfaceEnergyHandler() {
         }
 
