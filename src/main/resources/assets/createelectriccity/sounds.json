@@ -1,0 +1,10 @@
+{
+  "light": {
+    "sounds": [
+      {
+        "name": "createelectriccity:light",
+        "type": "sound"
+      }
+    ]
+  }
+}

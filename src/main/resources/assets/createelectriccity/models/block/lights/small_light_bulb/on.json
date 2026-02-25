@@ -1,6 +1,5 @@
 {
 	"credit": "Made with Blockbench",
-	"render_type": "minecraft:translucent",
 	"textures": {
 		"1": "createelectriccity:block/small_light_bulb/small_light_bulb_on",
 		"particle": "createelectriccity:block/small_light_bulb/small_light_bulb_on"
@@ -47,20 +46,6 @@
 				"west": {"uv": [0, 2, 6, 8], "texture": "#1"},
 				"up": {"uv": [0, 2, 6, 8], "texture": "#1"},
 				"down": {"uv": [0, 2, 6, 8], "texture": "#1"}
-			}
-		},
-		{
-			"name": "light",
-			"from": [5, 1, 5],
-			"to": [11, 7, 11],
-			"rotation": {"angle": 0, "axis": "y", "origin": [0, -3, 0]},
-			"faces": {
-				"north": {"uv": [0, 8, 6, 14], "texture": "#1"},
-				"east": {"uv": [0, 8, 6, 14], "texture": "#1"},
-				"south": {"uv": [0, 8, 6, 14], "texture": "#1"},
-				"west": {"uv": [0, 8, 6, 14], "texture": "#1"},
-				"up": {"uv": [0, 8, 6, 14], "texture": "#1"},
-				"down": {"uv": [10, 8, 16, 14], "texture": "#1"}
 			}
 		},
 		{

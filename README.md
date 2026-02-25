@@ -1,13 +1,25 @@
+# Important note
+
+This mod is not yet ready to be played with.
+It's still very unstable and should not be installed on a server or client except for testing.
+
 # Create Electric City
 Addon to the Create mod by witch-captain nakou.
 
 # About
 
-Create Electric City extends Create and Crafts & Additions by adding some more blocs and item using electricity systems (like the one from C&A).
+Create : Electric City extends Create and Crafts & Additions by adding some more blocs and item using electricity systems (like the one from C&A).
 
 # Content
 
 - A light bubble!
+
+# Stolen Stuff
+
+This basecode is heavily inspired (if not straight up stolen) from the following projects : 
+- Create : Crafts & Additions (needed so i could integrate my lights as connectors)
+- Create : Better Motors (my jumping point into making an addon to an addon to a mod, structure of this project is basically a copy/paste that I purged and then rebuilt)
+- Create : The Factory Must Grow (Lights, Light glow are basically inspired/Stolen from there, I wanted the same thing but integrated with the C&A FE & connector systems)
 
 # License
 
@@ -15,7 +27,7 @@ Available under MIT the license more info at: https://tldrlegal.com/license/mit-
 
 MIT License
 
-Copyright 2022 MRH0
+Copyright 2026 witch-captain nakou
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

@@ -2,20 +2,37 @@ package dev.nakou.createelectriccity.content.common;
 
 import com.mrh0.createaddition.energy.IWireNode;
 import com.mrh0.createaddition.energy.NodeRotation;
-import com.mrh0.createaddition.shapes.CAShapes;
+import com.mrh0.createaddition.index.CASounds;
 import com.simibubi.create.api.contraption.transformable.TransformableBlock;
 import com.simibubi.create.content.contraptions.StructureTransform;
 import com.simibubi.create.content.equipment.wrench.IWrenchable;
 import com.simibubi.create.foundation.block.IBE;
+import com.simibubi.create.foundation.utility.CreateLang;
+import com.tterrag.registrate.providers.DataGenContext;
+import com.tterrag.registrate.providers.RegistrateBlockstateProvider;
+import dev.engine_room.flywheel.lib.model.baked.PartialModel;
+import dev.nakou.createelectriccity.CreateElectricCity;
 import dev.nakou.createelectriccity.config.CommonConfig;
+import dev.nakou.createelectriccity.content.smalllightbulb.SmallLightBulbBlock;
+import dev.nakou.createelectriccity.registry.CECPartialModels;
+import dev.nakou.createelectriccity.utils.StringFormattingTool;
+import net.minecraft.ChatFormatting;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.BlockGetter;
@@ -31,10 +48,16 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.*;
+import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import net.neoforged.neoforge.client.model.generators.BlockModelProvider;
+import net.neoforged.neoforge.client.model.generators.ModelFile;
+import net.neoforged.neoforge.client.model.generators.MultiPartBlockStateBuilder;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.List;
 
 public abstract class AbstractLightBlock<BE extends AbstractLightBlockEntity> extends Block implements IBE<BE>, IWrenchable, TransformableBlock {
     public static final DirectionProperty FACING;
@@ -75,6 +98,25 @@ public abstract class AbstractLightBlock<BE extends AbstractLightBlockEntity> ex
                 .setValue(LEVEL, 0);
     }
 
+    @Override
+    protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand pHand, BlockHitResult hitResult) {
+        if (player.isShiftKeyDown())
+            return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+        ItemStack heldItem = player.getItemInHand(pHand);
+        AbstractLightBlockEntity be = getBlockEntity(level, pos);
+        DyeColor dye = DyeColor.getColor(heldItem);
+        if (be != null) {
+            if (dye != null) {
+                level.playSound(null, pos, SoundEvents.DYE_USE, SoundSource.BLOCKS, 1.0F, 1.0F);
+                be.setColor(dye);
+                return ItemInteractionResult.SUCCESS;
+            }
+        }
+
+
+        return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+    }
+
     public void playerDestroy(Level level, Player player, BlockPos pos, BlockState state, @Nullable BlockEntity blockEntity, ItemStack tool) {
         super.playerDestroy(level, player, pos, state, blockEntity, tool);
         if (!level.isClientSide()) {
@@ -88,13 +130,49 @@ public abstract class AbstractLightBlock<BE extends AbstractLightBlockEntity> ex
         }
     }
 
+    @Override
+    public void appendHoverText(ItemStack stack, Item.TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
+        super.appendHoverText(stack, context, tooltip, flag);
+
+        if(Screen.hasShiftDown()){
+            tooltip.add(CreateLang.translate("createelectriccity.small_light_bulb.tooltip.summary")
+                    .style(ChatFormatting.AQUA)
+                    .component());
+            tooltip.add(CreateLang.translate("createelectriccity.small_light_bulb.tooltip.condition1")
+                    .style(ChatFormatting.DARK_GRAY)
+                    .component());
+            tooltip.add(CreateLang.translate("createelectriccity.small_light_bulb.tooltip.behaviour1")
+                    .style(ChatFormatting.AQUA)
+                    .component());
+            tooltip.add(CreateLang.translate("createelectriccity.small_light_bulb.tooltip.condition2")
+                    .style(ChatFormatting.DARK_GRAY)
+                    .component());
+            tooltip.add(CreateLang.translate("createelectriccity.small_light_bulb.tooltip.behaviour2")
+                    .style(ChatFormatting.AQUA)
+                    .component());
+        }
+        else {
+            tooltip.add(CreateLang.translate("tooltip.createelectriccity.transfers")
+                    .style(ChatFormatting.GRAY)
+                    .component());
+            tooltip.add(CreateLang.text(" ").translate("tooltip.createelectriccity.energy_per_tick",
+                            StringFormattingTool.formatLong(CommonConfig.SMALL_LIGHT_BUBBLE.CONSUMPTION.get()))
+                    .style(ChatFormatting.AQUA)
+                    .component());
+
+            tooltip.add(CreateLang.translate("tooltip.createelectriccity.shift")
+                    .style(ChatFormatting.DARK_GRAY)
+                    .component());
+
+        }
+    }
+
     public InteractionResult onWrenched(BlockState state, UseOnContext c) {
         if (c.getLevel().isClientSide()) {
             c.getLevel().playLocalSound((double)c.getClickedPos().getX(), (double)c.getClickedPos().getY(), (double)c.getClickedPos().getZ(), SoundEvents.BONE_BLOCK_HIT, SoundSource.BLOCKS, 1.0F, 1.0F, false);
         }
 
-        //c.getLevel().setBlockAndUpdate(c.getClickedPos(), (BlockState)state.setValue(MODE, ((LightMode)state.getValue(MODE)).getNext()));
-        return IWrenchable.super.onWrenched(state, c);
+        return InteractionResult.PASS;
     }
 
     public InteractionResult onSneakWrenched(BlockState state, UseOnContext c) {
@@ -161,16 +239,6 @@ public abstract class AbstractLightBlock<BE extends AbstractLightBlockEntity> ex
 
         state = (BlockState)state.setValue(FACING, rotation.rotate((Direction)state.getValue(FACING), false));
         return (BlockState)state.setValue(NodeRotation.ROTATION, rotation);
-    }
-
-    @Override
-    public void animateTick(BlockState state, Level level, BlockPos pos, RandomSource random) {
-        // 5% chance per tick to play a small 'crackle' sound
-        if (random.nextFloat() < 0.05f) {
-            level.playLocalSound(pos.getX(), pos.getY(), pos.getZ(),
-                    SoundEvents.REDSTONE_TORCH_BURNOUT, SoundSource.BLOCKS,
-                    0.5f, 1.5f + random.nextFloat(), false);
-        }
     }
 
     static {

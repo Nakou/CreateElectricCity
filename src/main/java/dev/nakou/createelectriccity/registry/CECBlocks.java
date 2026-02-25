@@ -1,6 +1,7 @@
 package dev.nakou.createelectriccity.registry;
 
 import com.mrh0.createaddition.energy.NodeMovementBehaviour;
+import com.simibubi.create.foundation.data.BlockStateGen;
 import com.simibubi.create.foundation.data.SharedProperties;
 import com.tterrag.registrate.util.entry.BlockEntry;
 import dev.nakou.createelectriccity.CreateElectricCity;
@@ -26,7 +27,8 @@ public class CECBlocks {
     public static final BlockEntry<SmallLightBulbBlock> SMALL_LIGHT_BULB =
             REGISTRATE.block("small_light_bulb", SmallLightBulbBlock::new)
                     .initialProperties(SharedProperties::softMetal)
-                    .blockstate(SmallLightBulbBlock::makeBlockState)
+                    .blockstate(BlockStateGen.directionalBlockProvider(true))
+                    //.blockstate(SmallLightBulbBlock::makeBlockState)
                     .properties(p -> p.lightLevel(s -> s.getValue(LIGHT)))
                     .properties(p -> p
                             .mapColor(MapColor.TERRACOTTA_WHITE)

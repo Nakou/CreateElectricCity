@@ -20,8 +20,11 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import dev.nakou.createelectriccity.content.smalllightbulb.SmallLightBulbBlock;
+import dev.nakou.createelectriccity.sound.CECSoundScapes;
 import net.createmod.catnip.animation.LerpedFloat;
 import net.createmod.catnip.outliner.Outliner;
+import net.createmod.catnip.platform.CatnipServices;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -34,6 +37,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.neoforged.neoforge.capabilities.BlockCapabilityCache;
@@ -41,7 +45,18 @@ import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.energy.IEnergyStorage;
 import org.jetbrains.annotations.Nullable;
 
-public abstract class AbstractLightBlockEntity extends SmartBlockEntity implements IWireNode, IObserveBlockEntity, IHaveGoggleInformation, IDebugDrawer, IEnergyProvider {
+public abstract class AbstractLightBlockEntity extends SmartBlockEntity implements IWireNode, IObserveBlockEntity, IHaveGoggleInformation, IDebugDrawer {
+
+    private final static float OFFSET_HEIGHT = 1f;
+    private final static float OFFSET_DEVIDER = 2f;
+    public final static Vec3 OFFSET_DOWN = new Vec3(0f, -OFFSET_HEIGHT/OFFSET_DEVIDER, 0f);
+    public final static Vec3 OFFSET_UP = new Vec3(0f, OFFSET_HEIGHT/OFFSET_DEVIDER, 0f);
+    public final static Vec3 OFFSET_NORTH = new Vec3(0f, 0f, -OFFSET_HEIGHT/OFFSET_DEVIDER);
+    public final static Vec3 OFFSET_WEST = new Vec3(-OFFSET_HEIGHT/OFFSET_DEVIDER, 0f, 0f);
+    public final static Vec3 OFFSET_SOUTH = new Vec3(0f, 0f, OFFSET_HEIGHT/OFFSET_DEVIDER);
+    public final static Vec3 OFFSET_EAST = new Vec3(OFFSET_HEIGHT/OFFSET_DEVIDER, 0f, 0f);
+
+
     private final Set<LocalNode> wireCache = new HashSet<>();
     private final LocalNode[] localNodes = new LocalNode[this.getNodeCount()];
     private final IWireNode[] nodeCache = new IWireNode[this.getNodeCount()];
@@ -55,26 +70,16 @@ public abstract class AbstractLightBlockEntity extends SmartBlockEntity implemen
     public LerpedFloat glow = LerpedFloat.linear();
     public DyeColor color = DyeColor.WHITE;
 
+    private int posTimeOffset = 0;
+
     public AbstractLightBlockEntity(BlockEntityType<?> blockEntityTypeIn, BlockPos pos, BlockState state) {
         super(blockEntityTypeIn, pos, state);
-    }
-
-    public @Nullable IEnergyStorage getEnergyStorage(@Nullable Direction direction) {
-        return !this.isEnergyInput(direction) && !this.isEnergyOutput(direction) ? null : this.internal;
-    }
-
-    // that doesn't work ingame...
-    public float getFlickerIntensity(float partialTicks) {
-        long time = System.currentTimeMillis();
-        float noise = (float) Math.sin(time * 0.05) * 0.2f;
-        return Math.max(0.3f, 1.0f - (float) Math.random() * 0.5f + noise);
+        posTimeOffset = 10 + (Math.abs(pos.getX()*31 + pos.getY()*45 + pos.getZ()*33) % 7) * 3;
     }
 
     public abstract int getConsumption();
 
-    public abstract int getMaxIn();
-
-    public abstract int getMaxOut();
+    public abstract int getLightProduction();
 
     public int getCapacity() {
         return Math.min(this.getMaxIn(), this.getMaxOut());
@@ -82,6 +87,14 @@ public abstract class AbstractLightBlockEntity extends SmartBlockEntity implemen
 
     public @Nullable IWireNode getWireNode(int index) {
         return IWireNode.getWireNodeFrom(index, this, this.localNodes, this.nodeCache, this.level);
+    }
+
+    public void setColor(DyeColor color) {
+        if(color==DyeColor.BLACK||color == DyeColor.LIGHT_GRAY|| color == DyeColor.GRAY)
+            return;
+
+        this.color = color;
+        notifyUpdate();
     }
 
     @Override
@@ -130,12 +143,33 @@ public abstract class AbstractLightBlockEntity extends SmartBlockEntity implemen
         return this.network;
     }
 
-    public boolean isEnergyInput(Direction side) {
-        return this.getBlockState().getValue(AbstractLightBlock.FACING) == side;
+    public int getMaxIn() {
+        return dev.nakou.createelectriccity.config.CommonConfig.LIGHTS_MAX_INPUT.get();
     }
 
-    public boolean isEnergyOutput(Direction side) {
-        return this.getBlockState().getValue(AbstractLightBlock.FACING) == side;
+    public int getMaxOut() {
+        return dev.nakou.createelectriccity.config.CommonConfig.LIGHTS_MAX_OUTPUT.get();
+    }
+
+    @Override
+    public int getNodeCount() {
+        return 4;
+    }
+
+    @Override
+    public Vec3 getNodeOffset(int node) {
+        return switch (getBlockState().getValue(AbstractLightBlock.FACING)) {
+            case DOWN -> OFFSET_DOWN;
+            case UP -> OFFSET_UP;
+            case NORTH -> OFFSET_NORTH;
+            case WEST -> OFFSET_WEST;
+            case SOUTH -> OFFSET_SOUTH;
+            case EAST -> OFFSET_EAST;
+        };
+    }
+
+    public int getMaxWireLength() {
+        return dev.nakou.createelectriccity.config.CommonConfig.LIGHTS_MAX_LENGTH.get();
     }
 
     public void read(CompoundTag nbt, HolderLookup.Provider registries, boolean clientPacket) {
@@ -216,15 +250,42 @@ public abstract class AbstractLightBlockEntity extends SmartBlockEntity implemen
         }
     }
 
+    private int tickToggleTimer = 0;
+
     protected void specialTick() {
+        if(getLevel() == null) return;
+        if(level.isClientSide()) return;
+        EnergyNetwork network = getNetwork(0);
+        if (network != null) network.demand(1);
+        boolean hasEnergy = network != null && network.pull(getConsumption(), false) > 0;
+        tickToggleTimer = tickToggleTimer + (hasEnergy ? 1 : -1);
+
+        if (tickToggleTimer >= posTimeOffset) {
+            tickToggleTimer = posTimeOffset;
+            if (!getBlockState().getValue(SmallLightBulbBlock.POWERED))
+                getLevel().setBlockAndUpdate(getBlockPos(), getBlockState()
+                        .setValue(SmallLightBulbBlock.POWERED, true)
+                        .setValue(SmallLightBulbBlock.LEVEL,getLightProduction()));
+        }
+
+        if (tickToggleTimer <= -posTimeOffset) {
+            tickToggleTimer = -posTimeOffset;
+            if (getBlockState().getValue(SmallLightBulbBlock.POWERED))
+                getLevel().setBlockAndUpdate(getBlockPos(), getBlockState()
+                        .setValue(SmallLightBulbBlock.POWERED, false)
+                        .setValue(SmallLightBulbBlock.LEVEL, 0));
+        }
     }
 
     public void tick() {
         if (this.firstTick) {
             this.firstTick();
         }
-        glow.chase(getConsumption()*25, 0.4, LerpedFloat.Chaser.EXP);
-        glow.tickChaser();
+        if (level.isClientSide()) {
+            CatnipServices.PLATFORM.executeOnClientOnly(() -> this::tickAudio);
+            glow.chase(getConsumption() * 25, 0.4, LerpedFloat.Chaser.EXP);
+            glow.tickChaser();
+        }
         if (this.level != null) {
             if (this.level.isLoaded(this.getBlockPos())) {
                 if (!this.wireCache.isEmpty() && !this.isRemoved()) {
@@ -342,10 +403,6 @@ public abstract class AbstractLightBlockEntity extends SmartBlockEntity implemen
         return IHaveGoggleInformation.super.addToGoggleTooltip(tooltip, isPlayerSneaking);
     }
 
-    public boolean ignoreCapSide() {
-        return ((LightMode) this.getBlockState().getValue(AbstractLightBlock.MODE)).isActive();
-    }
-
     public void updateExternalEnergyStorage() {
         if (this.level != null) {
             if (this.level instanceof ServerLevel) {
@@ -396,6 +453,12 @@ public abstract class AbstractLightBlockEntity extends SmartBlockEntity implemen
             }
         }
     }
+
+    public void tickAudio() {
+        float pitch = 0.75f;
+        CECSoundScapes.play(CECSoundScapes.AmbienceGroup.LIGHT, worldPosition, pitch);
+    }
+
 
     protected class InterfaceEnergyHandler implements IEnergyStorage {
         public InterfaceEnergyHandler() {
