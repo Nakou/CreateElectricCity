@@ -23,6 +23,7 @@ import java.util.Set;
 import dev.nakou.createelectriccity.content.smalllightbulb.SmallLightBulbBlock;
 import dev.nakou.createelectriccity.sound.CECSoundScapes;
 import net.createmod.catnip.animation.LerpedFloat;
+import net.createmod.catnip.nbt.NBTHelper;
 import net.createmod.catnip.outliner.Outliner;
 import net.createmod.catnip.platform.CatnipServices;
 import net.minecraft.ChatFormatting;
@@ -207,7 +208,7 @@ public abstract class AbstractLightBlockEntity extends SmartBlockEntity implemen
         if (!nodes.isEmpty() && this.network != null) {
             this.network.invalidate();
         }
-
+        color = NBTHelper.readEnum(nbt,"color",DyeColor.class);
     }
 
     public void write(CompoundTag nbt, HolderLookup.Provider registries, boolean clientPacket) {
@@ -222,7 +223,7 @@ public abstract class AbstractLightBlockEntity extends SmartBlockEntity implemen
                 nodes.add(tag);
             }
         }
-
+        NBTHelper.writeEnum(nbt,"color",color);
         nbt.put("nodes", nodes);
     }
 
