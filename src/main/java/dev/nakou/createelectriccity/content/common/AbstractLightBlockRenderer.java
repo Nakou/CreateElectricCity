@@ -37,6 +37,7 @@ public abstract class AbstractLightBlockRenderer<A extends SmartBlockEntity> ext
         stack.pushPose();
 
         float time = (be.getLevel().getGameTime() + partialTicks);
+        float pulse = (float) (Math.sin(time * 0.08f) * 0.05f + 1.0f);
         float flicker = (float) (Math.sin(time * 0.35f) * Math.sin(time * 0.12f) * 0.15f + 0.85f);
 
         float glow = be.glow.getValue(partialTicks) * flicker;
@@ -45,6 +46,10 @@ public abstract class AbstractLightBlockRenderer<A extends SmartBlockEntity> ext
         if(be.glow.getValue()!=0) {
 
             applyFacingTransform(stack, blockState.getValue(FACING));
+
+            stack.translate(0.5, 0.5, 0.5);
+            stack.scale(pulse, pulse, pulse);
+            stack.translate(-0.5, -0.5, -0.5);
 
             SuperByteBuffer lightModel = CachedBuffers.partial(getLightModel(be), blockState)
                     .light((int) glow * 3 + 40)
