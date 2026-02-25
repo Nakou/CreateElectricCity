@@ -4,11 +4,18 @@ import com.mrh0.createaddition.energy.NodeMovementBehaviour;
 import com.simibubi.create.foundation.data.SharedProperties;
 import com.tterrag.registrate.util.entry.BlockEntry;
 import dev.nakou.createelectriccity.CreateElectricCity;
+import dev.nakou.createelectriccity.config.CommonConfig;
 import dev.nakou.createelectriccity.content.smalllightbulb.SmallLightBulbBlock;
+import net.minecraft.client.renderer.RenderType;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.material.MapColor;
 
 import static com.simibubi.create.api.behaviour.movement.MovementBehaviour.movementBehaviour;
 import static com.simibubi.create.foundation.data.ModelGen.customItemModel;
 import static dev.nakou.createelectriccity.CreateElectricCity.REGISTRATE;
+import static dev.nakou.createelectriccity.content.common.AbstractLightBlock.LIGHT;
 
 public class CECBlocks {
 
@@ -18,8 +25,14 @@ public class CECBlocks {
 
     public static final BlockEntry<SmallLightBulbBlock> SMALL_LIGHT_BULB =
             REGISTRATE.block("small_light_bulb", SmallLightBulbBlock::new)
-                    .initialProperties(SharedProperties::stone)
+                    .initialProperties(SharedProperties::softMetal)
                     .blockstate(SmallLightBulbBlock::makeBlockState)
+                    .properties(p -> p.lightLevel(s -> s.getValue(LIGHT)))
+                    .properties(p -> p
+                            .mapColor(MapColor.TERRACOTTA_WHITE)
+                            .strength(2.0f)
+                            .sound(SoundType.GLASS)
+                    )
                     .onRegister(movementBehaviour(new NodeMovementBehaviour()))
                     .item()
                     .transform(customItemModel())

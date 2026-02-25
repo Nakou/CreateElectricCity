@@ -19,6 +19,8 @@ import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
+import net.createmod.catnip.animation.LerpedFloat;
 import net.createmod.catnip.outliner.Outliner;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
@@ -29,6 +31,7 @@ import net.minecraft.nbt.ListTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.shapes.Shapes;
@@ -49,6 +52,8 @@ public abstract class AbstractLightBlockEntity extends SmartBlockEntity implemen
     protected InterfaceEnergyHandler internal = new InterfaceEnergyHandler();
     protected BlockCapabilityCache<IEnergyStorage, Direction> external;
     boolean externalStorageInvalid = false;
+    public LerpedFloat glow = LerpedFloat.linear();
+    public DyeColor color = DyeColor.WHITE;
 
     public AbstractLightBlockEntity(BlockEntityType<?> blockEntityTypeIn, BlockPos pos, BlockState state) {
         super(blockEntityTypeIn, pos, state);
@@ -58,7 +63,14 @@ public abstract class AbstractLightBlockEntity extends SmartBlockEntity implemen
         return !this.isEnergyInput(direction) && !this.isEnergyOutput(direction) ? null : this.internal;
     }
 
-    public abstract int getComsumption();
+    // that doesn't work ingame...
+    public float getFlickerIntensity(float partialTicks) {
+        long time = System.currentTimeMillis();
+        float noise = (float) Math.sin(time * 0.05) * 0.2f;
+        return Math.max(0.3f, 1.0f - (float) Math.random() * 0.5f + noise);
+    }
+
+    public abstract int getConsumption();
 
     public abstract int getMaxIn();
 
@@ -211,7 +223,8 @@ public abstract class AbstractLightBlockEntity extends SmartBlockEntity implemen
         if (this.firstTick) {
             this.firstTick();
         }
-
+        glow.chase(getConsumption()*25, 0.4, LerpedFloat.Chaser.EXP);
+        glow.tickChaser();
         if (this.level != null) {
             if (this.level.isLoaded(this.getBlockPos())) {
                 if (!this.wireCache.isEmpty() && !this.isRemoved()) {
@@ -320,7 +333,7 @@ public abstract class AbstractLightBlockEntity extends SmartBlockEntity implemen
         if(this.getBlockState().getValue(AbstractLightBlock.POWERED)){
             CALang.builder().add(Component.translatable("create.tooltip.createelectriccity.lights.on").withStyle(ChatFormatting.AQUA)).forGoggles(tooltip);
             CALang.builder().add(Component.translatable("create.tooltip.createelectriccity.energy_usage").withStyle(ChatFormatting.GRAY)).forGoggles(tooltip);
-            CALang.builder().add(Component.literal(" ").append(Util.format(getComsumption())).append("⚡/t").withStyle(ChatFormatting.AQUA)).forGoggles(tooltip);
+            CALang.builder().add(Component.literal(" ").append(Util.format(getConsumption())).append("⚡/t").withStyle(ChatFormatting.AQUA)).forGoggles(tooltip);
         } else {
             CALang.builder().add(Component.translatable("create.tooltip.createelectriccity.lights.off").withStyle(ChatFormatting.RED)).forGoggles(tooltip);
             CALang.builder().add(Component.translatable("create.tooltip.createelectriccity.energy_usage").withStyle(ChatFormatting.GRAY)).forGoggles(tooltip);

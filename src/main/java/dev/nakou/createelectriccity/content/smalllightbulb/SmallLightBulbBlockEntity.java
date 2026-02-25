@@ -88,7 +88,7 @@ public class SmallLightBulbBlockEntity extends AbstractLightBlockEntity {
         return CommonConfig.LIGHTS_MAX_LENGTH.get();
     }
 
-    public int getComsumption(){
+    public int getConsumption(){
         return CommonConfig.SMALL_LIGHT_BUBBLE.CONSUMPTION.get();
     }
 
@@ -99,21 +99,23 @@ public class SmallLightBulbBlockEntity extends AbstractLightBlockEntity {
         if(level.isClientSide()) return;
         EnergyNetwork network = getNetwork(0);
         if (network != null) network.demand(1);
-        boolean hasEnergy = network != null && network.pull(getComsumption(), false) > 0;
+        boolean hasEnergy = network != null && network.pull(getConsumption(), false) > 0;
         tickToggleTimer = tickToggleTimer + (hasEnergy ? 1 : -1);
 
         if (tickToggleTimer >= posTimeOffset) {
             tickToggleTimer = posTimeOffset;
             if (!getBlockState().getValue(SmallLightBulbBlock.POWERED))
                 getLevel().setBlockAndUpdate(getBlockPos(), getBlockState()
-                        .setValue(SmallLightBulbBlock.POWERED, true));
+                        .setValue(SmallLightBulbBlock.POWERED, true)
+                        .setValue(SmallLightBulbBlock.LEVEL, CommonConfig.SMALL_LIGHT_BUBBLE.LUMENS.getAsInt()));
         }
 
         if (tickToggleTimer <= -posTimeOffset) {
             tickToggleTimer = -posTimeOffset;
             if (getBlockState().getValue(SmallLightBulbBlock.POWERED))
                 getLevel().setBlockAndUpdate(getBlockPos(), getBlockState()
-                        .setValue(SmallLightBulbBlock.POWERED, false));
+                        .setValue(SmallLightBulbBlock.POWERED, false)
+                        .setValue(SmallLightBulbBlock.LEVEL, 0));
         }
     }
 

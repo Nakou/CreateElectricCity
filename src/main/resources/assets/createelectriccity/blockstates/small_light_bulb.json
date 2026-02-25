@@ -73,7 +73,7 @@
     {
       "when": { "AND": [{ "facing": "west", "powered" : true }] },
       "apply": {
-        "model": "createelectriccity:block/lights/small_light_bulb/on",
+        "model": "createelectriccity:block/lights/small_light_bulb",
         "x": 90, "y": 90
       }
     },
@@ -81,49 +81,6 @@
       "when": { "AND": [{ "facing": "east", "powered" : true }] },
       "apply": {
         "model": "createelectriccity:block/lights/small_light_bulb/on",
-        "x": 90, "y": 270
-      }
-    },
-
-    {
-      "when": { "AND": [{ "facing": "down", "variant": "girder" }] },
-      "apply": {
-        "model": "createelectriccity:block/lights/girder_base",
-        "x": 0, "y": 90
-      }
-    },
-    {
-      "when": { "AND": [{ "facing": "up", "variant": "girder" }] },
-      "apply": {
-        "model": "createelectriccity:block/lights/girder_base",
-        "x": 180, "y": 90
-      }
-    },
-    {
-      "when": { "AND": [{ "facing": "north", "variant": "girder" }] },
-      "apply": {
-        "model": "createelectriccity:block/lights/girder_base",
-        "x": 90, "y": 180
-      }
-    },
-    {
-      "when": { "AND": [{ "facing": "south", "variant": "girder" }] },
-      "apply": {
-        "model": "createelectriccity:block/lights/girder_base",
-        "x": 90, "y": 0
-      }
-    },
-    {
-      "when": { "AND": [{ "facing": "west", "variant": "girder" }] },
-      "apply": {
-        "model": "createelectriccity:block/lights/girder_base",
-        "x": 90, "y": 90
-      }
-    },
-    {
-      "when": { "AND": [{ "facing": "east", "variant": "girder" }] },
-      "apply": {
-        "model": "createelectriccity:block/lights/girder_base",
         "x": 90, "y": 270
       }
     }

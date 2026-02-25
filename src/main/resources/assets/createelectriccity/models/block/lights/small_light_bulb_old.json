@@ -1,8 +1,10 @@
 {
+	"format_version": "1.21.1",
 	"credit": "Made with Blockbench",
 	"render_type": "minecraft:translucent",
 	"textures": {
-		"1": "createelectriccity:block/small_light_bulb/small_light_bulb_off"
+		"1": "createelectriccity:block/small_light_bulb/small_light_bulb_not_bulb_on",
+		"glow_layer": "createelectriccity:block/small_light_bulb/small_light_bulb_not_bulb_on"
 	},
 	"elements": [
 		{
@@ -16,7 +18,7 @@
 				"south": {"uv": [0, 0, 2, 1], "texture": "#1"},
 				"west": {"uv": [0, 0, 2, 1], "texture": "#1"},
 				"up": {"uv": [2, 2, 0, 0], "texture": "#1"},
-				"down": {"uv": [2, 0, 0, 2], "texture": "#1"}
+				"down": {"uv": [2, 0, 0, 2], "texture": "#1", "cullface": "down"}
 			}
 		},
 		{

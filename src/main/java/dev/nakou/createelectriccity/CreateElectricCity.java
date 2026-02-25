@@ -80,6 +80,7 @@ public class CreateElectricCity {
         CECBlocks.load();
         CECBlockEntityTypes.load();
         CECItems.load();
+        CECPartialModels.init();
         modContainer.registerConfig(ModConfig.Type.COMMON, CommonConfig.COMMON_CONFIG);
         modEventBus.addListener(RegisterCapabilitiesEvent.class, CECCapabilities::register);
         LOGGER.info("CEC : Done initializing");

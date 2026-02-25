@@ -12,6 +12,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -39,10 +40,12 @@ public abstract class AbstractLightBlock<BE extends AbstractLightBlockEntity> ex
     public static final DirectionProperty FACING;
     public static final EnumProperty<LightMode> MODE;
     public static final EnumProperty<LightVariant> VARIANT;
+    public static final IntegerProperty LIGHT = BlockStateProperties.LEVEL;
     private static final VoxelShape boxwe;
     private static final VoxelShape boxsn;
 
     public static final BooleanProperty POWERED;
+    public static final IntegerProperty LEVEL;
 
     public AbstractLightBlock(BlockBehaviour.Properties properties) {
         super(properties);
@@ -54,11 +57,11 @@ public abstract class AbstractLightBlock<BE extends AbstractLightBlockEntity> ex
     }
 
     public int getLightEmission(BlockState state, BlockGetter level, BlockPos pos) {
-        return (Boolean)state.getValue(POWERED) ? CommonConfig.SMALL_LIGHT_BUBBLE.LUMENS.getAsInt() : 0;
+        return (Boolean)state.getValue(POWERED) ? state.getValue(LEVEL) : 0;
     }
 
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-        builder.add(new Property[]{FACING, MODE, NodeRotation.ROTATION, VARIANT, POWERED});
+        builder.add(new Property[]{FACING, MODE, NodeRotation.ROTATION, VARIANT, POWERED, LEVEL});
     }
 
     public BlockState getStateForPlacement(BlockPlaceContext c) {
@@ -68,7 +71,8 @@ public abstract class AbstractLightBlock<BE extends AbstractLightBlockEntity> ex
         return ((BlockState)(BlockState)((BlockState)((BlockState)this
                 .defaultBlockState().setValue(FACING, dir))
                 .setValue(MODE, mode)).setValue(VARIANT, variant))
-                .setValue(POWERED, false);
+                .setValue(POWERED, false)
+                .setValue(LEVEL, 0);
     }
 
     public void playerDestroy(Level level, Player player, BlockPos pos, BlockState state, @Nullable BlockEntity blockEntity, ItemStack tool) {
@@ -90,10 +94,8 @@ public abstract class AbstractLightBlock<BE extends AbstractLightBlockEntity> ex
         }
 
         //c.getLevel().setBlockAndUpdate(c.getClickedPos(), (BlockState)state.setValue(MODE, ((LightMode)state.getValue(MODE)).getNext()));
-        return OnWrenched(state, c);
+        return IWrenchable.super.onWrenched(state, c);
     }
-
-    public abstract InteractionResult OnWrenched(BlockState state, UseOnContext c);
 
     public InteractionResult onSneakWrenched(BlockState state, UseOnContext c) {
         BlockEntity be = c.getLevel().getBlockEntity(c.getClickedPos());
@@ -104,7 +106,6 @@ public abstract class AbstractLightBlock<BE extends AbstractLightBlockEntity> ex
             if (!c.getLevel().isClientSide() && c.getPlayer() != null) {
                 cbe.dropWires(c.getLevel(), c.getPlayer(), !c.getPlayer().isCreative());
             }
-
             return IWrenchable.super.onSneakWrenched(state, c);
         } else {
             return IWrenchable.super.onSneakWrenched(state, c);
@@ -162,8 +163,19 @@ public abstract class AbstractLightBlock<BE extends AbstractLightBlockEntity> ex
         return (BlockState)state.setValue(NodeRotation.ROTATION, rotation);
     }
 
+    @Override
+    public void animateTick(BlockState state, Level level, BlockPos pos, RandomSource random) {
+        // 5% chance per tick to play a small 'crackle' sound
+        if (random.nextFloat() < 0.05f) {
+            level.playLocalSound(pos.getX(), pos.getY(), pos.getZ(),
+                    SoundEvents.REDSTONE_TORCH_BURNOUT, SoundSource.BLOCKS,
+                    0.5f, 1.5f + random.nextFloat(), false);
+        }
+    }
+
     static {
         POWERED = BlockStateProperties.POWERED;
+        LEVEL = BlockStateProperties.LEVEL;
         FACING = BlockStateProperties.FACING;
         MODE = EnumProperty.create("mode", LightMode.class);
         VARIANT = EnumProperty.create("variant", LightVariant.class);

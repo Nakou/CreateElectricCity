@@ -9,6 +9,7 @@ import dev.nakou.createelectriccity.content.common.AbstractLightBlock;
 import dev.nakou.createelectriccity.content.common.LightMode;
 import dev.nakou.createelectriccity.content.common.LightVariant;
 import dev.nakou.createelectriccity.registry.CECBlockEntityTypes;
+import dev.nakou.createelectriccity.registry.CECPartialModels;
 import dev.nakou.createelectriccity.utils.StringFormattingTool;
 import net.createmod.catnip.math.VoxelShaper;
 import net.minecraft.ChatFormatting;
@@ -41,11 +42,6 @@ public class SmallLightBulbBlock extends AbstractLightBlock<SmallLightBulbBlockE
     public static final VoxelShaper CONNECTOR_SHAPE = CAShapes.shape(5, 0, 5, 11, 9, 11).forDirectional();
     public SmallLightBulbBlock(Properties properties) {
         super(properties);
-    }
-
-    @Override
-    public InteractionResult OnWrenched(BlockState state, UseOnContext c) {
-        return InteractionResult.SUCCESS;
     }
 
     @Override
@@ -107,45 +103,30 @@ public class SmallLightBulbBlock extends AbstractLightBlock<SmallLightBulbBlockE
 
     public static void makeBlockState(DataGenContext<Block, SmallLightBulbBlock> ctx, RegistrateBlockstateProvider provider) {
         BlockModelProvider models = provider.models();
-        String basePath = "block/lights/";
-        String basePathSmall = basePath + "small_light_bulb/";
         MultiPartBlockStateBuilder builder = provider.getMultipartBuilder(ctx.get());
-
-        ModelFile.ExistingModelFile onModel = models.getExistingFile(ResourceLocation.fromNamespaceAndPath(MODID, basePathSmall + "on"));
-        ModelFile.ExistingModelFile offModel = models.getExistingFile(ResourceLocation.fromNamespaceAndPath(MODID, basePathSmall + "off"));
-        ModelFile.ExistingModelFile girderBaseModel = models.getExistingFile(ResourceLocation.fromNamespaceAndPath(MODID, basePathSmall + "girder_base"));
+        ModelFile.ExistingModelFile modelOn = models.getExistingFile(CECPartialModels.SMALL_LIGHT_BULB_ON.modelLocation());
+        ModelFile.ExistingModelFile modelOff = models.getExistingFile(CECPartialModels.SMALL_LIGHT_BULB_OFF.modelLocation());
 
         for(Direction direction: Direction.values()) {
             int horizontalAngle = direction == Direction.UP ? 180 : direction == Direction.DOWN ? 0 : 90;
             int  verticalAngle = ((int) direction.toYRot() + (direction.getAxis()
                     .isVertical() ? 180 : 0))% 360;
             builder.part()
-                    .modelFile(onModel)
+                    .modelFile(modelOn)
                     .rotationX(horizontalAngle)
                     .rotationY(verticalAngle)
                     .addModel()
                     .condition(SmallLightBulbBlock.FACING, direction)
-                    .condition(SmallLightBulbBlock.MODE, LightMode.None)
                     .condition(SmallLightBulbBlock.POWERED, Boolean.TRUE)
                     .end()
                     .part()
-                    .modelFile(offModel)
+                    .modelFile(modelOff)
                     .rotationX(horizontalAngle)
                     .rotationY(verticalAngle)
                     .addModel()
                     .condition(SmallLightBulbBlock.FACING, direction)
-                    .condition(SmallLightBulbBlock.MODE, LightMode.None)
                     .condition(SmallLightBulbBlock.POWERED, Boolean.FALSE)
                     .end();
-            builder.part()
-                    .modelFile(girderBaseModel)
-                    .rotationX(horizontalAngle)
-                    .rotationY(verticalAngle)
-                    .addModel()
-                    .condition(SmallLightBulbBlock.FACING, direction)
-                    .condition(SmallLightBulbBlock.VARIANT, LightVariant.Girder)
-                    .end();
-
         }
     }
 }
