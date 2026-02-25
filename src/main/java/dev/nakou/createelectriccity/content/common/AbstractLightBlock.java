@@ -130,33 +130,37 @@ public abstract class AbstractLightBlock<BE extends AbstractLightBlockEntity> ex
         }
     }
 
+    public abstract String getInternalName();
+
+    public abstract int getConsumption();
+
     @Override
     public void appendHoverText(ItemStack stack, Item.TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
         super.appendHoverText(stack, context, tooltip, flag);
-
+        String blockName = getInternalName();
         if(Screen.hasShiftDown()){
-            tooltip.add(CreateLang.translate("createelectriccity.small_light_bulb.tooltip.summary")
+            tooltip.add(CreateLang.translate("createelectriccity.common.tooltip.summary")
                     .style(ChatFormatting.AQUA)
                     .component());
-            tooltip.add(CreateLang.translate("createelectriccity.small_light_bulb.tooltip.condition1")
+            tooltip.add(CreateLang.translate("createelectriccity.common.tooltip.condition1", blockName)
                     .style(ChatFormatting.DARK_GRAY)
                     .component());
-            tooltip.add(CreateLang.translate("createelectriccity.small_light_bulb.tooltip.behaviour1")
+            tooltip.add(CreateLang.translate("createelectriccity.common.tooltip.behaviour1", blockName)
                     .style(ChatFormatting.AQUA)
                     .component());
-            tooltip.add(CreateLang.translate("createelectriccity.small_light_bulb.tooltip.condition2")
+            tooltip.add(CreateLang.translate("createelectriccity.common.tooltip.condition2", blockName)
                     .style(ChatFormatting.DARK_GRAY)
                     .component());
-            tooltip.add(CreateLang.translate("createelectriccity.small_light_bulb.tooltip.behaviour2")
+            tooltip.add(CreateLang.translate("createelectriccity.common.tooltip.behaviour2", blockName)
                     .style(ChatFormatting.AQUA)
                     .component());
         }
         else {
-            tooltip.add(CreateLang.translate("tooltip.createelectriccity.transfers")
+            tooltip.add(CreateLang.translate("create.tooltip.createelectriccity.using")
                     .style(ChatFormatting.GRAY)
                     .component());
             tooltip.add(CreateLang.text(" ").translate("tooltip.createelectriccity.energy_per_tick",
-                            StringFormattingTool.formatLong(CommonConfig.SMALL_LIGHT_BUBBLE.CONSUMPTION.get()))
+                            StringFormattingTool.formatLong(getConsumption()))
                     .style(ChatFormatting.AQUA)
                     .component());
 

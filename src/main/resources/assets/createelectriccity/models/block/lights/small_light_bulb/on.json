@@ -1,8 +1,8 @@
 {
 	"credit": "Made with Blockbench",
 	"textures": {
-		"1": "createelectriccity:block/small_light_bulb/small_light_bulb_on",
-		"particle": "createelectriccity:block/small_light_bulb/small_light_bulb_on"
+		"1": "createelectriccity:block/small_light_bulb/on",
+		"particle": "createelectriccity:block/small_light_bulb/on"
 	},
 	"shade": false,
 	"elements": [

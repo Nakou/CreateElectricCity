@@ -3,84 +3,84 @@
     {
       "when": { "AND": [{ "facing": "down", "powered" : false }] },
       "apply": {
-        "model": "createelectriccity:block/lights/small_light_bulb/off",
+        "model": "createelectriccity:block/lights/lantern/off",
         "x": 0, "y": 90
       }
     },
     {
       "when": { "AND": [{ "facing": "up", "powered" : false }] },
       "apply": {
-        "model": "createelectriccity:block/lights/small_light_bulb/off",
+        "model": "createelectriccity:block/lights/lantern/off",
         "x": 180, "y": 90
       }
     },
     {
       "when": { "AND": [{ "facing": "north", "powered" : false }] },
       "apply": {
-        "model": "createelectriccity:block/lights/small_light_bulb/off",
+        "model": "createelectriccity:block/lights/lantern/off",
         "x": 90, "y": 180
       }
     },
     {
       "when": { "AND": [{ "facing": "south", "powered" : false }] },
       "apply": {
-        "model": "createelectriccity:block/lights/small_light_bulb/off",
+        "model": "createelectriccity:block/lights/lantern/off",
         "x": 90, "y": 0
       }
     },
     {
       "when": { "AND": [{ "facing": "west", "powered" : false }] },
       "apply": {
-        "model": "createelectriccity:block/lights/small_light_bulb/off",
+        "model": "createelectriccity:block/lights/lantern/off",
         "x": 90, "y": 90
       }
     },
     {
       "when": { "AND": [{ "facing": "east", "powered" : false }] },
       "apply": {
-        "model": "createelectriccity:block/lights/small_light_bulb/off",
+        "model": "createelectriccity:block/lights/lantern/off",
         "x": 90, "y": 270
       }
     },
     {
       "when": { "AND": [{ "facing": "down", "powered" : true }] },
       "apply": {
-        "model": "createelectriccity:block/lights/small_light_bulb/on",
+        "model": "createelectriccity:block/lights/lantern/on",
         "x": 0, "y": 90
       }
     },
     {
       "when": { "AND": [{ "facing": "up", "powered" : true }] },
       "apply": {
-        "model": "createelectriccity:block/lights/small_light_bulb/on",
+        "model": "createelectriccity:block/lights/lantern/on",
         "x": 180, "y": 90
       }
     },
     {
       "when": { "AND": [{ "facing": "north", "powered" : true }] },
       "apply": {
-        "model": "createelectriccity:block/lights/small_light_bulb/on",
+        "model": "createelectriccity:block/lights/lantern/on",
         "x": 90, "y": 180
       }
     },
     {
       "when": { "AND": [{ "facing": "south", "powered" : true }] },
       "apply": {
-        "model": "createelectriccity:block/lights/small_light_bulb/on",
+        "model": "createelectriccity:block/lights/lantern/on",
         "x": 90, "y": 0
       }
     },
     {
       "when": { "AND": [{ "facing": "west", "powered" : true }] },
       "apply": {
-        "model": "createelectriccity:block/lights/small_light_bulb/on",
+        "model": "createelectriccity:block/lights/lantern/on",
         "x": 90, "y": 90
       }
     },
     {
       "when": { "AND": [{ "facing": "east", "powered" : true }] },
       "apply": {
-        "model": "createelectriccity:block/lights/small_light_bulb/on",
+        "model": "createelectriccity:block/lights/lantern/on",
         "x": 90, "y": 270
       }
     }

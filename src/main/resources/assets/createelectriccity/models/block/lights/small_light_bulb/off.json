@@ -2,7 +2,8 @@
 	"credit": "Made with Blockbench",
 	"render_type": "minecraft:translucent",
 	"textures": {
-		"1": "createelectriccity:block/small_light_bulb/small_light_bulb_off"
+		"1": "createelectriccity:block/small_light_bulb/off",
+		"particle": "createelectriccity:block/small_light_bulb/off"
 	},
 	"elements": [
 		{

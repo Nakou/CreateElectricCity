@@ -29,11 +29,15 @@
   "create.tooltip.createelectriccity.lights.info": "Light Info",
   "create.tooltip.createelectriccity.lights.on": "On",
   "create.tooltip.createelectriccity.lights.off": "Off",
+  "block.createelectriccity.lantern": "Lantern",
   "block.createelectriccity.small_light_bulb": "Small Light Bulb",
-  "create.createelectriccity.small_light_bulb.tooltip": "§6§lLIGHT SOURCE",
-  "create.createelectriccity.small_light_bulb.tooltip.summary": "§7Connects to §eForge Energy§7 compatible\nblocks with wires to light up.",
-  "create.createelectriccity.small_light_bulb.tooltip.condition1": "Connected",
-  "create.createelectriccity.small_light_bulb.tooltip.behaviour1": "§7Connected with §current wires§7\n(§9Create:Craft & Addition Wires§7).",
-  "create.createelectriccity.small_light_bulb.tooltip.condition2": "Right-click",
-  "create.createelectriccity.small_light_bulb.tooltip.behaviour2": "§7While holding a §6Copper Spool§7 or §6Better§7\n(§9Create:Craft & Addition Wires§7) to create a wire link\nwith up to §e4§7 other connectors."
+  "create.createelectriccity.common.tooltip": "§6§lLIGHT SOURCE",
+  "create.createelectriccity.common.tooltip.summary": "§7Connects to §eForge Energy§7 compatible\nblocks with wires to light up.",
+  "create.createelectriccity.common.tooltip.condition1": "Connected",
+  "create.createelectriccity.common.tooltip.behaviour1": "§7Connected with §current wires§7\n(§9Create:Craft & Addition Wires§7).",
+  "create.createelectriccity.common.tooltip.condition2": "Right-click",
+  "create.createelectriccity.common.tooltip.behaviour2": "§7While holding a §6Copper Spool§7 or §6Better§7\n(§9Create:Craft & Addition Wires§7) to create a wire link\nwith up to §e4§7 other lights or connectors."
+
+
+
 }

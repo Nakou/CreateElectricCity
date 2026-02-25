@@ -1,4 +1,4 @@
-package dev.nakou.createelectriccity.content.smalllightbulb;
+package dev.nakou.createelectriccity.content.lantern;
 
 import com.mrh0.createaddition.shapes.CAShapes;
 import dev.nakou.createelectriccity.config.CommonConfig;
@@ -13,15 +13,15 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-public class SmallLightBulbBlock extends AbstractLightBlock<SmallLightBulbBlockEntity> {
-    public static final VoxelShaper SHAPE = CAShapes.shape(5, 0, 5, 11, 9, 11).forDirectional();
-    public SmallLightBulbBlock(Properties properties) {
+public class LanternBlock extends AbstractLightBlock<LanternBlockEntity> {
+    public static final VoxelShaper SHAPE = CAShapes.shape(3, 0, 3, 11, 9, 11).forDirectional();
+    public LanternBlock(Properties properties) {
         super(properties);
     }
 
     @Override
     public String getInternalName() {
-        return "small_light_bulb";
+        return "lantern";
     }
 
     @Override
@@ -30,18 +30,18 @@ public class SmallLightBulbBlock extends AbstractLightBlock<SmallLightBulbBlockE
     }
 
     @Override
-    public Class<SmallLightBulbBlockEntity> getBlockEntityClass() {
-        return SmallLightBulbBlockEntity.class;
+    public Class<LanternBlockEntity> getBlockEntityClass() {
+        return LanternBlockEntity.class;
     }
 
     @Override
-    public BlockEntityType<? extends SmallLightBulbBlockEntity> getBlockEntityType() {
-        return CECBlockEntityTypes.SMALL_LIGHT_BULB.get();
+    public BlockEntityType<? extends LanternBlockEntity> getBlockEntityType() {
+        return CECBlockEntityTypes.LANTERN.get();
     }
 
     @Override
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
-        return CECBlockEntityTypes.SMALL_LIGHT_BULB.create(pos, state);
+        return CECBlockEntityTypes.LANTERN.create(pos, state);
     }
 
     @Override

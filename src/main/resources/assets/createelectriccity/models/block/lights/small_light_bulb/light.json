@@ -2,8 +2,8 @@
 	"format_version": "1.21.1",
 	"credit": "Made with Blockbench",
 	"textures": {
-		"1": "createelectriccity:block/small_light_bulb/light",
-		"particle": "createelectriccity:block/small_light_bulb/light"
+		"1": "createelectriccity:block/small_light_bulb/light_flickering",
+		"particle": "createelectriccity:block/small_light_bulb/light_flickering"
 	},
 	"elements": [
 		{

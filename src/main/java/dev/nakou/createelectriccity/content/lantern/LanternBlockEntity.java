@@ -1,4 +1,4 @@
-package dev.nakou.createelectriccity.content.smalllightbulb;
+package dev.nakou.createelectriccity.content.lantern;
 
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
 import dev.nakou.createelectriccity.config.CommonConfig;
@@ -14,16 +14,16 @@ import java.util.List;
 
 
 
-public class SmallLightBulbBlockEntity extends AbstractLightBlockEntity {
+public class LanternBlockEntity extends AbstractLightBlockEntity {
 
-    public SmallLightBulbBlockEntity(BlockEntityType<?> blockEntityTypeIn, BlockPos pos, BlockState state) {
+    public LanternBlockEntity(BlockEntityType<?> blockEntityTypeIn, BlockPos pos, BlockState state) {
         super(blockEntityTypeIn, pos, state);
     }
 
     public static void registerCapabilities(RegisterCapabilitiesEvent event) {
         event.registerBlockEntity(
                 Capabilities.EnergyStorage.BLOCK,
-                CECBlockEntityTypes.SMALL_LIGHT_BULB.get(),
+                CECBlockEntityTypes.LANTERN.get(),
                 (be, context) -> be.internal
         );
     }
@@ -32,9 +32,9 @@ public class SmallLightBulbBlockEntity extends AbstractLightBlockEntity {
     public void addBehaviours(List<BlockEntityBehaviour> list) {}
 
     public int getConsumption(){
-        return CommonConfig.SMALL_LIGHT_BUBBLE.CONSUMPTION.get();
+        return CommonConfig.LANTERN.CONSUMPTION.get();
     }
 
-    public int getLightProduction(){ return  CommonConfig.SMALL_LIGHT_BUBBLE.LUMEN.getAsInt(); }
+    public int getLightProduction(){ return  CommonConfig.LANTERN.LUMEN.getAsInt(); }
 
 }

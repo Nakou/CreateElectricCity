@@ -58,7 +58,15 @@ public abstract class AbstractLightBlockRenderer<A extends SmartBlockEntity> ext
 
             if(be.color == DyeColor.WHITE){
                 lightModel.color(color, color, (int) (color * 0.8), 255);
-            }else   lightModel.color(be.color.getTextColor());
+            }
+            else{
+                int c = be.color.getTextColor();
+                int r = (int) (((c >> 16) & 0xFF) * flicker);
+                int g = (int) (((c >> 8) & 0xFF) * flicker);
+                int b = (int) ((c & 0xFF) * flicker);
+                lightModel.color(r, g, b, 255);
+                //lightModel.color(be.color.getTextColor());
+            }
 
             lightModel.renderInto(stack, bufferIn.getBuffer(RenderTypes.additive()));
         }
