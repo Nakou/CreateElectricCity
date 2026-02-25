@@ -1,6 +1,7 @@
 {
 	"credit": "Made with Blockbench",
 	"texture_size": [48, 48],
+	"render_type": "minecraft:translucent",
 	"textures": {
 		"1": "createelectriccity:block/small_light_bulb/off",
 		"2": "createelectriccity:block/lantern/off",

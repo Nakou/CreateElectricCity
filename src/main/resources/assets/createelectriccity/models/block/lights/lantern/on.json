@@ -1,5 +1,6 @@
 {
 	"credit": "Made with Blockbench",
+	"render_type": "minecraft:cutout",
 	"texture_size": [48, 48],
 	"textures": {
 		"1": "createelectriccity:block/small_light_bulb/on",

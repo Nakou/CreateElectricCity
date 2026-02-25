@@ -14,7 +14,7 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
 public class LanternBlock extends AbstractLightBlock<LanternBlockEntity> {
-    public static final VoxelShaper SHAPE = CAShapes.shape(3, 0, 3, 11, 9, 11).forDirectional();
+    public static final VoxelShaper SHAPE = CAShapes.shape(1, 0, 1, 15, 15, 15).forDirectional();
     public LanternBlock(Properties properties) {
         super(properties);
     }

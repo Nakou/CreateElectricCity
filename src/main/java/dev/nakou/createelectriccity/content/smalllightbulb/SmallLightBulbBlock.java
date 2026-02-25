@@ -14,7 +14,7 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
 public class SmallLightBulbBlock extends AbstractLightBlock<SmallLightBulbBlockEntity> {
-    public static final VoxelShaper SHAPE = CAShapes.shape(5, 0, 5, 11, 9, 11).forDirectional();
+    public static final VoxelShaper SHAPE = CAShapes.shape(5, 0, 5, 11, 7, 11).forDirectional();
     public SmallLightBulbBlock(Properties properties) {
         super(properties);
     }

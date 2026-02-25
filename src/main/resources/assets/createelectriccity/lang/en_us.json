@@ -29,8 +29,14 @@
   "create.tooltip.createelectriccity.lights.info": "Light Info",
   "create.tooltip.createelectriccity.lights.on": "On",
   "create.tooltip.createelectriccity.lights.off": "Off",
+
   "block.createelectriccity.lantern": "Lantern",
   "block.createelectriccity.small_light_bulb": "Small Light Bulb",
+  "block.createelectriccity.big_light_bulb": "Big Light Bulb",
+  "block.createelectriccity.old_light_bulb": "Old Light Bulb",
+  "block.createelectriccity.celling_light": "Celling Light",
+  "block.createelectriccity.neon": "Neon",
+
   "create.createelectriccity.common.tooltip": "§6§lLIGHT SOURCE",
   "create.createelectriccity.common.tooltip.summary": "§7Connects to §eForge Energy§7 compatible\nblocks with wires to light up.",
   "create.createelectriccity.common.tooltip.condition1": "Connected",
