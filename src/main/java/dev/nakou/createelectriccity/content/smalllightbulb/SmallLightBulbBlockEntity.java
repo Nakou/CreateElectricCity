@@ -32,9 +32,9 @@ public class SmallLightBulbBlockEntity extends AbstractLightBlockEntity {
     public void addBehaviours(List<BlockEntityBehaviour> list) {}
 
     public int getConsumption(){
-        return CommonConfig.SMALL_LIGHT_BUBBLE.CONSUMPTION.get();
+        return CommonConfig.SMALL_LIGHT_BULB.CONSUMPTION.get();
     }
 
-    public int getLightProduction(){ return  CommonConfig.SMALL_LIGHT_BUBBLE.LUMEN.getAsInt(); }
+    public int getLightProduction(){ return  CommonConfig.SMALL_LIGHT_BULB.LUMEN.getAsInt(); }
 
 }
