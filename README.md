@@ -12,14 +12,23 @@ Create : Electric City extends Create and Crafts & Additions by adding some more
 
 # Content
 
-- A light bubble!
+![A screenshot of the different lights availables](https://github.com/user-attachments/assets/194d8105-e897-4d17-be71-05cc680a94ea)
+
+Create Electric City comes with 4 (yes, four) new lights that you can integrate to your Craft & Additions connector network.
+- A simple light bulb.
+- An old style lightbulb.
+- A big light bulb.
+- A Lantern.
+
+Each light (except the old style because it's old school orange on purpose) are dyeable.
+
 
 # Stolen Stuff
 
 This basecode is heavily inspired (if not straight up stolen) from the following projects : 
 - Create : Crafts & Additions (needed so i could integrate my lights as connectors)
 - Create : Better Motors (my jumping point into making an addon to an addon to a mod, structure of this project is basically a copy/paste that I purged and then rebuilt)
-- Create : The Factory Must Grow (Lights, Light glow are basically inspired/Stolen from there, I wanted the same thing but integrated with the C&A FE & connector systems)
+- Create : The Factory Must Grow (Lights, Light glow and way to implement lights as variants are concepts basically inspired/Stolen from there, I wanted the same thing but integrated with the C&A FE & connector systems, that's where the idea for this mod comes from)
 
 # License
 

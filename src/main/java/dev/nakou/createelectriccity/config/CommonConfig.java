@@ -14,6 +14,7 @@ public class CommonConfig {
     // ====== General Categories ======
     public static final String CATEGORY_SMALL_LIGHT_BULB = "small light bulbs";
     public static final String CATEGORY_BIG_LIGHT_BULB = "big light bulbs";
+    public static final String CATEGORY_OLD_LIGHT_BULB = "old light bulbs";
     public static final String CATEGORY_LANTERN = "lanterns";
     public static final String CATEGORY_WIRES = "wires";
 
@@ -33,11 +34,13 @@ public class CommonConfig {
         public ModConfigSpec.IntValue CONSUMPTION;
         public ModConfigSpec.IntValue LUMEN;
         public ModConfigSpec.BooleanValue AUDIO_ENABLED;
+        public ModConfigSpec.BooleanValue DYEABLE;
     }
 
     public static LightConfig SMALL_LIGHT_BULB;
     public static LightConfig LANTERN;
     public static LightConfig BIG_LIGHT_BULB;
+    public static LightConfig OLD_LIGHT_BULB;
 
     static {
         // Go check Create : Better Motors for references
@@ -50,19 +53,21 @@ public class CommonConfig {
         builder.pop();
 
         CONNECTOR_IGNORE_FACE_CHECK = builder.comment("Ignore checking if block face can support connector.").define("connector_ignore_face_check", false);
-        SMALL_LIGHT_BULB = light(builder, CATEGORY_SMALL_LIGHT_BULB, 1, 8);
-        BIG_LIGHT_BULB = light(builder, CATEGORY_BIG_LIGHT_BULB, 2, 14);
-        LANTERN = light(builder, CATEGORY_LANTERN, 2, 12);
+        SMALL_LIGHT_BULB = light(builder, CATEGORY_SMALL_LIGHT_BULB, 1, 6, true);
+        BIG_LIGHT_BULB = light(builder, CATEGORY_BIG_LIGHT_BULB, 2, 14, true);
+        LANTERN = light(builder, CATEGORY_LANTERN, 2, 12, true);
+        OLD_LIGHT_BULB = light(builder, CATEGORY_OLD_LIGHT_BULB, 2, 8, false);
         COMMON_CONFIG = builder.build();
     }
 
     /** Helper for motor config creation */
     private static LightConfig light(ModConfigSpec.Builder builder, String category,
-                                     int consumption, int lumens) {
+                                     int consumption, int lumens, boolean dyeable) {
         builder.comment(category).push(category);
         LightConfig config = new LightConfig();
         config.CONSUMPTION = builder.comment("Consumption of FE/t").defineInRange("consumption", consumption, 0, Integer.MAX_VALUE);
         config.LUMEN = builder.comment("Production of light").defineInRange("lumens", lumens, 0, 15);
+        config.DYEABLE = builder.comment("Can be Dyed").define("dyeable", dyeable);
         builder.pop();
         return config;
     }

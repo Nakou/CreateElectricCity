@@ -81,6 +81,7 @@ public abstract class AbstractLightBlock<BE extends AbstractLightBlockEntity> ex
                 .setValue(LEVEL, 0);
     }
 
+    // TODO : Delete this once every lights have been transferred to Generic implementation.
     @Override
     protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand pHand, BlockHitResult hitResult) {
         if (player.isShiftKeyDown())
