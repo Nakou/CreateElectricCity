@@ -73,7 +73,7 @@ public abstract class AbstractLightBlockRenderer<A extends SmartBlockEntity> ext
         stack.popPose();
     }
 
-    private void applyFacingTransform(PoseStack stack, Direction facing) {
+    protected void applyFacingTransform(PoseStack stack, Direction facing) {
         // Translate to block center, rotate, then translate back
         stack.translate(0.5, 0.5, 0.5);
         switch (facing) {
