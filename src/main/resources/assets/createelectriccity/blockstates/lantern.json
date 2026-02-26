@@ -45,7 +45,7 @@
     {
       "when": { "AND": [{ "facing": "down", "powered" : true }] },
       "apply": {
-        "model": "createelectriccity:block/lights/lantern/on_wall_mounted",
+        "model": "createelectriccity:block/lights/lantern/on",
         "x": 0, "y": 90
       }
     },

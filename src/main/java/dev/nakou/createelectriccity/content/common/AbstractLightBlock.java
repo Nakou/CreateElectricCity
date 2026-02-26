@@ -2,29 +2,18 @@ package dev.nakou.createelectriccity.content.common;
 
 import com.mrh0.createaddition.energy.IWireNode;
 import com.mrh0.createaddition.energy.NodeRotation;
-import com.mrh0.createaddition.index.CASounds;
-import com.simibubi.create.api.contraption.transformable.TransformableBlock;
-import com.simibubi.create.content.contraptions.StructureTransform;
 import com.simibubi.create.content.equipment.wrench.IWrenchable;
 import com.simibubi.create.foundation.block.IBE;
 import com.simibubi.create.foundation.utility.CreateLang;
-import com.tterrag.registrate.providers.DataGenContext;
-import com.tterrag.registrate.providers.RegistrateBlockstateProvider;
-import dev.engine_room.flywheel.lib.model.baked.PartialModel;
-import dev.nakou.createelectriccity.CreateElectricCity;
 import dev.nakou.createelectriccity.config.CommonConfig;
-import dev.nakou.createelectriccity.content.smalllightbulb.SmallLightBulbBlock;
-import dev.nakou.createelectriccity.registry.CECPartialModels;
 import dev.nakou.createelectriccity.utils.StringFormattingTool;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.ItemInteractionResult;
@@ -37,11 +26,8 @@ import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Mirror;
-import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.SupportType;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockBehaviour;
@@ -52,14 +38,11 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.neoforged.neoforge.client.model.generators.BlockModelProvider;
-import net.neoforged.neoforge.client.model.generators.ModelFile;
-import net.neoforged.neoforge.client.model.generators.MultiPartBlockStateBuilder;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public abstract class AbstractLightBlock<BE extends AbstractLightBlockEntity> extends Block implements IBE<BE>, IWrenchable, TransformableBlock {
+public abstract class AbstractLightBlock<BE extends AbstractLightBlockEntity> extends Block implements IBE<BE>, IWrenchable {
     public static final DirectionProperty FACING;
     public static final EnumProperty<LightMode> MODE;
     public static final EnumProperty<LightVariant> VARIANT;
@@ -223,19 +206,7 @@ public abstract class AbstractLightBlock<BE extends AbstractLightBlockEntity> ex
                 || (Boolean) CommonConfig.CONNECTOR_IGNORE_FACE_CHECK.get();
     }
 
-    public BlockState rotate(BlockState state, Rotation direction) {
-        return (BlockState)state.setValue(FACING, direction.rotate((Direction)state.getValue(FACING)));
-    }
-
-    public BlockState rotate(BlockState state, LevelAccessor world, BlockPos pos, Rotation direction) {
-        return this.rotate(state, direction);
-    }
-
-    public BlockState mirror(BlockState state, Mirror mirror) {
-        return (BlockState)state.setValue(FACING, mirror.mirror((Direction)state.getValue(FACING)));
-    }
-
-    public BlockState transform(BlockState state, StructureTransform transform) {
+    /*public BlockState transform(BlockState state, StructureTransform transform) {
         NodeRotation rotation = NodeRotation.get(transform.rotationAxis, transform.rotation);
         if (transform.mirror != null) {
             state = this.mirror(state, transform.mirror);
@@ -243,7 +214,7 @@ public abstract class AbstractLightBlock<BE extends AbstractLightBlockEntity> ex
 
         state = (BlockState)state.setValue(FACING, rotation.rotate((Direction)state.getValue(FACING), false));
         return (BlockState)state.setValue(NodeRotation.ROTATION, rotation);
-    }
+    }*/
 
     static {
         POWERED = BlockStateProperties.POWERED;
