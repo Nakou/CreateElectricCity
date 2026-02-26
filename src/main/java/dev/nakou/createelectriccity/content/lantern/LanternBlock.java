@@ -4,6 +4,7 @@ import com.mrh0.createaddition.shapes.CAShapes;
 import dev.nakou.createelectriccity.config.CommonConfig;
 import dev.nakou.createelectriccity.content.common.AbstractLightBlock;
 import dev.nakou.createelectriccity.registry.CECBlockEntityTypes;
+import dev.nakou.createelectriccity.registry.CECShapes;
 import net.createmod.catnip.math.VoxelShaper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.BlockGetter;
@@ -14,7 +15,7 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
 public class LanternBlock extends AbstractLightBlock<LanternBlockEntity> {
-    public static final VoxelShaper SHAPE = CAShapes.shape(4, 0, 4, 12, 11, 12).forDirectional();
+    public static final VoxelShaper SHAPE = CECShapes.LANTERN;
     public LanternBlock(Properties properties) {
         super(properties);
     }

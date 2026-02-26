@@ -4,6 +4,7 @@ import com.mrh0.createaddition.shapes.CAShapes;
 import dev.nakou.createelectriccity.config.CommonConfig;
 import dev.nakou.createelectriccity.content.common.AbstractLightBlock;
 import dev.nakou.createelectriccity.registry.CECBlockEntityTypes;
+import dev.nakou.createelectriccity.registry.CECShapes;
 import net.createmod.catnip.math.VoxelShaper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.BlockGetter;
@@ -14,7 +15,7 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
 public class SmallLightBulbBlock extends AbstractLightBlock<SmallLightBulbBlockEntity> {
-    public static final VoxelShaper SHAPE = CAShapes.shape(5, 0, 5, 11, 7, 11).forDirectional();
+    public static final VoxelShaper SHAPE = CECShapes.SMALL_LIGHT_BULB;
     public SmallLightBulbBlock(Properties properties) {
         super(properties);
     }
