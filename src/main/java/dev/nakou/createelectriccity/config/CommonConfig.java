@@ -12,9 +12,10 @@ public class CommonConfig {
     public static ModConfigSpec COMMON_CONFIG;
 
     // ====== General Categories ======
-    public static final String CATAGORY_SMALL_LIGHT_BULB = "small light bulbs";
-    public static final String CATAGORY_LANTERN = "lanterns";
-    public static final String CATAGORY_WIRES = "wires";
+    public static final String CATEGORY_SMALL_LIGHT_BULB = "small light bulbs";
+    public static final String CATEGORY_BIG_LIGHT_BULB = "big light bulbs";
+    public static final String CATEGORY_LANTERN = "lanterns";
+    public static final String CATEGORY_WIRES = "wires";
 
     // ====== Wires ======
     public static ModConfigSpec.IntValue LIGHTS_MAX_INPUT;
@@ -34,22 +35,24 @@ public class CommonConfig {
         public ModConfigSpec.BooleanValue AUDIO_ENABLED;
     }
 
-    public static LightConfig SMALL_LIGHT_BUBBLE;
+    public static LightConfig SMALL_LIGHT_BULB;
     public static LightConfig LANTERN;
+    public static LightConfig BIG_LIGHT_BULB;
 
     static {
         // Go check Create : Better Motors for references
         builder.comment("General configuration for Create: Electric City");
 
-        builder.comment("Wires").push(CATAGORY_WIRES);
+        builder.comment("Wires").push(CATEGORY_WIRES);
         LIGHTS_MAX_INPUT = builder.comment("Heavy Connector max input in FE/t").defineInRange("max_input", 90000, 0, Integer.MAX_VALUE);
         LIGHTS_MAX_OUTPUT = builder.comment("Heavy Connector max output in FE/t").defineInRange("max_output", 90000, 0, Integer.MAX_VALUE);
         LIGHTS_MAX_LENGTH = builder.comment("Heavy Connector max length in blocks").defineInRange("max_length", 48, 0, 256);
         builder.pop();
 
         CONNECTOR_IGNORE_FACE_CHECK = builder.comment("Ignore checking if block face can support connector.").define("connector_ignore_face_check", false);
-        SMALL_LIGHT_BUBBLE = light(builder, CATAGORY_SMALL_LIGHT_BULB, 1, 8);
-        LANTERN = light(builder, CATAGORY_LANTERN, 2, 14);
+        SMALL_LIGHT_BULB = light(builder, CATEGORY_SMALL_LIGHT_BULB, 1, 8);
+        BIG_LIGHT_BULB = light(builder, CATEGORY_BIG_LIGHT_BULB, 2, 14);
+        LANTERN = light(builder, CATEGORY_LANTERN, 2, 12);
         COMMON_CONFIG = builder.build();
     }
 
