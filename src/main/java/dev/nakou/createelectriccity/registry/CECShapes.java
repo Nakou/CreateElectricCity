@@ -16,6 +16,7 @@ public class CECShapes {
             SMALL_LIGHT_BULB = shape(5, 0, 5, 11, 7, 11).forDirectional(),
             BIG_LIGHT_BULB = shape(5, 0, 5, 11, 7, 11).forDirectional(),
             OLD_LIGHT_BULB = shape(5, 0, 5, 11, 7, 11).forDirectional(),
+            HANGING_LIGHT = shape(5, 0, 5, 11, 7, 11).forDirectional(),
             LANTERN = shape(4, 0, 4, 12, 11, 12).forDirectional();
 
     private static Builder shape(VoxelShape shape) {

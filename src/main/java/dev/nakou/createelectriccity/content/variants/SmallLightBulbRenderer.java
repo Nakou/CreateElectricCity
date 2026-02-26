@@ -1,4 +1,4 @@
-package dev.nakou.createelectriccity.content.smalllightbulb;
+package dev.nakou.createelectriccity.content.variants;
 
 import dev.engine_room.flywheel.lib.model.baked.PartialModel;
 import dev.nakou.createelectriccity.content.common.AbstractLightBlockEntity;

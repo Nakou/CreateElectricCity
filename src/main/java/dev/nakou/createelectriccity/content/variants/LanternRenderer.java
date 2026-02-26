@@ -1,4 +1,4 @@
-package dev.nakou.createelectriccity.content.lantern;
+package dev.nakou.createelectriccity.content.variants;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import dev.engine_room.flywheel.lib.model.baked.PartialModel;

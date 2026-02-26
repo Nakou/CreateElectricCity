@@ -20,7 +20,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import dev.nakou.createelectriccity.content.smalllightbulb.SmallLightBulbBlock;
+import dev.nakou.createelectriccity.content.GenericLightBlock;
 import dev.nakou.createelectriccity.sound.CECSoundScapes;
 import net.createmod.catnip.animation.LerpedFloat;
 import net.createmod.catnip.nbt.NBTHelper;
@@ -263,18 +263,18 @@ public abstract class AbstractLightBlockEntity extends SmartBlockEntity implemen
 
         if (tickToggleTimer >= posTimeOffset) {
             tickToggleTimer = posTimeOffset;
-            if (!getBlockState().getValue(SmallLightBulbBlock.POWERED))
+            if (!getBlockState().getValue(GenericLightBlock.POWERED))
                 getLevel().setBlockAndUpdate(getBlockPos(), getBlockState()
-                        .setValue(SmallLightBulbBlock.POWERED, true)
-                        .setValue(SmallLightBulbBlock.LEVEL,getLightProduction()));
+                        .setValue(GenericLightBlock.POWERED, true)
+                        .setValue(GenericLightBlock.LEVEL,getLightProduction()));
         }
 
         if (tickToggleTimer <= -posTimeOffset) {
             tickToggleTimer = -posTimeOffset;
-            if (getBlockState().getValue(SmallLightBulbBlock.POWERED))
+            if (getBlockState().getValue(GenericLightBlock.POWERED))
                 getLevel().setBlockAndUpdate(getBlockPos(), getBlockState()
-                        .setValue(SmallLightBulbBlock.POWERED, false)
-                        .setValue(SmallLightBulbBlock.LEVEL, 0));
+                        .setValue(GenericLightBlock.POWERED, false)
+                        .setValue(GenericLightBlock.LEVEL, 0));
         }
     }
 

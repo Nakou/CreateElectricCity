@@ -7,15 +7,11 @@ import com.tterrag.registrate.util.entry.BlockEntry;
 import dev.nakou.createelectriccity.CreateElectricCity;
 import dev.nakou.createelectriccity.config.CommonConfig;
 import dev.nakou.createelectriccity.content.GenericLightBlock;
-import dev.nakou.createelectriccity.content.lantern.LanternBlock;
-import dev.nakou.createelectriccity.content.smalllightbulb.SmallLightBulbBlock;
-import net.minecraft.world.level.block.SoundType;
-import net.minecraft.world.level.material.MapColor;
+import dev.nakou.createelectriccity.content.variants.hanging_light.HangingLightBlock;
 
 import static com.simibubi.create.api.behaviour.movement.MovementBehaviour.movementBehaviour;
 import static com.simibubi.create.foundation.data.ModelGen.customItemModel;
 import static dev.nakou.createelectriccity.CreateElectricCity.REGISTRATE;
-import static dev.nakou.createelectriccity.content.common.AbstractLightBlock.LIGHT;
 
 public class CECBlocks {
 
@@ -45,32 +41,34 @@ public class CECBlocks {
                     .transform(customItemModel())
                     .register();
 
-    public static final BlockEntry<SmallLightBulbBlock> SMALL_LIGHT_BULB =
-            REGISTRATE.block("small_light_bulb", SmallLightBulbBlock::new)
+    public static final BlockEntry<GenericLightBlock> SMALL_LIGHT_BULB =
+            REGISTRATE.block("small_light_bulb",
+                            p -> new GenericLightBlock(p, CECBlockEntityTypes.SMALL_LIGHT_BULB,
+                                    CECShapes.SMALL_LIGHT_BULB, CommonConfig.SMALL_LIGHT_BULB, "small_light_bulb"))
                     .initialProperties(SharedProperties::softMetal)
                     .blockstate(BlockStateGen.directionalBlockProvider(true))
-                    //.blockstate(SmallLightBulbBlock::makeBlockState)
-                    .properties(p -> p.lightLevel(s -> s.getValue(LIGHT)))
-                    .properties(p -> p
-                            .mapColor(MapColor.TERRACOTTA_WHITE)
-                            .strength(2.0f)
-                            .sound(SoundType.GLASS)
-                    )
                     .onRegister(movementBehaviour(new NodeMovementBehaviour()))
                     .item()
                     .transform(customItemModel())
                     .register();
 
-    public static final BlockEntry<LanternBlock> LANTERN =
-            REGISTRATE.block("lantern", LanternBlock::new)
+    public static final BlockEntry<HangingLightBlock> HANGING_LIGHT =
+            REGISTRATE.block("hanging_light",
+                            p -> new HangingLightBlock(p, CECBlockEntityTypes.HANGING_LIGHT,
+                                    CECShapes.HANGING_LIGHT, CommonConfig.HANGING_LIGHT, "hanging_light"))
                     .initialProperties(SharedProperties::softMetal)
                     .blockstate(BlockStateGen.directionalBlockProvider(true))
-                    .properties(p -> p.lightLevel(s -> s.getValue(LIGHT)))
-                    .properties(p -> p
-                            .mapColor(MapColor.TERRACOTTA_WHITE)
-                            .strength(2.0f)
-                            .sound(SoundType.GLASS)
-                    )
+                    .onRegister(movementBehaviour(new NodeMovementBehaviour()))
+                    .item()
+                    .transform(customItemModel())
+                    .register();
+
+    public static final BlockEntry<GenericLightBlock> LANTERN =
+            REGISTRATE.block("lantern",
+                            p -> new GenericLightBlock(p, CECBlockEntityTypes.LANTERN,
+                                    CECShapes.LANTERN, CommonConfig.LANTERN, "lantern"))
+                    .initialProperties(SharedProperties::softMetal)
+                    .blockstate(BlockStateGen.directionalBlockProvider(true))
                     .onRegister(movementBehaviour(new NodeMovementBehaviour()))
                     .item()
                     .transform(customItemModel())

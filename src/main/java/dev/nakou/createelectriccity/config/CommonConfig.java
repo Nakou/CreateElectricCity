@@ -41,6 +41,7 @@ public class CommonConfig {
     public static LightConfig LANTERN;
     public static LightConfig BIG_LIGHT_BULB;
     public static LightConfig OLD_LIGHT_BULB;
+    public static LightConfig HANGING_LIGHT;
 
     static {
         // Go check Create : Better Motors for references
@@ -57,10 +58,11 @@ public class CommonConfig {
         BIG_LIGHT_BULB = light(builder, CATEGORY_BIG_LIGHT_BULB, 2, 14, true);
         LANTERN = light(builder, CATEGORY_LANTERN, 2, 12, true);
         OLD_LIGHT_BULB = light(builder, CATEGORY_OLD_LIGHT_BULB, 2, 8, false);
+        HANGING_LIGHT = light(builder, CATEGORY_OLD_LIGHT_BULB, 2, 13, true);
         COMMON_CONFIG = builder.build();
     }
 
-    /** Helper for motor config creation */
+    /** Helper for light config creation */
     private static LightConfig light(ModConfigSpec.Builder builder, String category,
                                      int consumption, int lumens, boolean dyeable) {
         builder.comment(category).push(category);
