@@ -3,6 +3,8 @@
 This mod is not yet ready to be played with.
 It's still very unstable and should not be installed on a server or client except for testing.
 
+![a freakin logo!](https://github.com/user-attachments/assets/0aa63853-82e8-410f-bfc9-1375bbf7b50e)
+
 # Create Electric City
 Addon to the Create mod by witch-captain nakou.
 
