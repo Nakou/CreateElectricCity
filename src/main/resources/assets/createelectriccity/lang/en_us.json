@@ -34,7 +34,7 @@
   "block.createelectriccity.small_light_bulb": "Small Light Bulb",
   "block.createelectriccity.big_light_bulb": "Big Light Bulb",
   "block.createelectriccity.old_light_bulb": "Old Light Bulb",
-  "block.createelectriccity.celling_light": "Celling Light",
+  "block.createelectriccity.hanging_light": "Celling Light",
   "block.createelectriccity.neon": "Neon",
 
   "create.createelectriccity.common.tooltip": "§6§lLIGHT SOURCE",

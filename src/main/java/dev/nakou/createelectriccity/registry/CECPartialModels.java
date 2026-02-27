@@ -9,7 +9,7 @@ public class CECPartialModels {
             LANTERN = block("lights/lantern/light"),
             BIG_LIGHT_BULB = block("lights/big_light_bulb/light"),
             OLD_LIGHT_BULB = block("lights/old_light_bulb/light"),
-            CELLING_LIGHT = block("lights/celling_light/light"),
+            HANGING_LIGHT = block("lights/hanging_light/light"),
             NEON = block("lights/neon/light");
 
     private static PartialModel block(String path) {

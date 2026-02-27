@@ -2,7 +2,7 @@
   "light": {
     "sounds": [
       {
-        "name": "createelectriccity:light",
+        "name": "createelectriccity:sounds/light",
         "type": "sound"
       }
     ]

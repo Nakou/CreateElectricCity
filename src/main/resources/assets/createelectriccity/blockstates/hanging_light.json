@@ -1,14 +1,14 @@
 {
   "multipart": [
     {
-      "when": { "AND": [{ "facing": "down", "powered" : false }] },
+      "when": { "powered" : false  },
       "apply": {
         "model": "createelectriccity:block/lights/hanging_light/off",
         "x": 0, "y": 90
       }
     },
     {
-      "when": { "AND": [{ "facing": "down", "powered" : true }] },
+      "when": { "powered" : true },
       "apply": {
         "model": "createelectriccity:block/lights/hanging_light/on",
         "x": 0, "y": 90

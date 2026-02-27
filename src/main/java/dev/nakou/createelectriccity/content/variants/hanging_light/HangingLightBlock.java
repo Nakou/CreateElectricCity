@@ -9,6 +9,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.state.BlockState;
 
 public class HangingLightBlock extends GenericLightBlock {
@@ -18,13 +19,23 @@ public class HangingLightBlock extends GenericLightBlock {
     }
 
     @Override
+    public boolean canSurvive(BlockState state, LevelReader level, BlockPos pos) {
+        BlockPos anchorPos = pos.above();
+        BlockState anchorState = level.getBlockState(anchorPos);
+
+        return anchorState.isFaceSturdy(level, anchorPos, Direction.DOWN);
+    }
+
+    @Override
     public BlockState getStateForPlacement(BlockPlaceContext context) {
         Level level = context.getLevel();
         BlockPos pos = context.getClickedPos();
 
-        if (level.getBlockState(pos.above()).isFaceSturdy(level, pos.above(), Direction.DOWN)) {
-            return this.defaultBlockState();
+        // If the block above can support us, allow placement
+        if (this.canSurvive(this.defaultBlockState(), level, pos)) {
+            return super.getStateForPlacement(context);
         }
+
         return null;
     }
 }
