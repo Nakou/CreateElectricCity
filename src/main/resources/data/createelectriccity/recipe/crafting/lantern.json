@@ -3,22 +3,22 @@
   "category": "misc",
   "key": {
     "I": {
-      "item": "minecraft:iron_nugget"
+      "item": "minecraft:iron_ingot"
     },
     "G": {
       "item": "minecraft:glass"
     },
     "C": {
-      "tag": "c:wires/copper"
+      "tag": "createelectriccity:small_light_bulb"
     }
   },
   "pattern": [
-    " G ",
-    " C ",
+    " I ",
+    "GCG",
     " I "
   ],
   "result": {
-    "id": "createelectriccity:small_light_bulb"
+    "id": "createelectriccity:lantern"
   },
   "show_notification": true
 }

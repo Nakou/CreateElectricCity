@@ -13,12 +13,12 @@
     }
   },
   "pattern": [
-    " G ",
-    " C ",
+    "GGG",
+    " CC",
     " I "
   ],
   "result": {
-    "id": "createelectriccity:small_light_bulb"
+    "id": "createelectriccity:big_light_bulb"
   },
   "show_notification": true
 }

@@ -140,7 +140,7 @@ public abstract class AbstractLightBlock<BE extends AbstractLightBlockEntity> ex
                     .component());
         }
         else {
-            tooltip.add(CreateLang.translate("create.tooltip.createelectriccity.using")
+            tooltip.add(CreateLang.translate("tooltip.createelectriccity.using")
                     .style(ChatFormatting.GRAY)
                     .component());
             tooltip.add(CreateLang.text(" ").translate("tooltip.createelectriccity.energy_per_tick",
